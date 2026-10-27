@@ -19,8 +19,9 @@
 
 <!-- ======================= 登入 ======================= -->
 <div id="login-view">
-  <div class="login-wrap">
-    <div class="login-head">
+  <div class="auth-shell">
+
+    <aside class="auth-brand">
       <svg class="landscape" viewBox="0 0 1200 340" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
         <defs>
           <linearGradient id="ls-sky" x1="0" y1="0" x2="0" y2="1">
@@ -44,61 +45,152 @@
           <path d="M-20 300q620-52 1240-34"/><path d="M-20 314q620-50 1240-30"/><path d="M-20 329q620-48 1240-26"/>
         </g>
       </svg>
-      <div class="login-head-text">
+      <div class="auth-brand-inner">
         <div class="brand-lockup">
           <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 33 19 20l5 6 5-8 10 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 15c-3.2-.4-5.4-2.6-5.6-5.8 3.2.2 5.4 2.4 5.6 5.8z" fill="currentColor"/></svg></div>
           <div class="brand-name">長信名茶<small>Ever Trust Tea · Since 1971</small></div>
         </div>
         <h1>內部管理與績效系統</h1>
         <div class="leaf-rule" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 14C3 12 2 7 4 2c4 1 7 5 4 12zm0 0V6" fill="currentColor" stroke="currentColor" stroke-width=".6"/></svg></div>
-        <p>Demo 不設密碼，點選身分即可進入。不同身分看到的畫面與可做的事完全不同。</p>
+        <p>績效評核 · 訂單 · 茶品庫存</p>
       </div>
+      <figure class="auth-store">
+        <img src="https://cdn.store-assets.com/s/772214/f/17532769.jpg?width=600" alt="長信名茶高雄建國門市內部" loading="lazy" onerror="this.parentNode.hidden = true">
+        <figcaption><strong>五十餘年在地茶行</strong>1971 年創立 · 南投自有茶廠 · 高雄建國一路門市</figcaption>
+      </figure>
+    </aside>
+
+    <div class="auth-main">
+      <div class="auth-card">
+        <div class="auth-notice" id="auth-notice" role="status" hidden></div>
+
+        <!-- 第一步：帳號密碼 -->
+        <form id="step-password" novalidate>
+          <h2>登入</h2>
+          <p class="auth-sub">請使用公司配發的帳號登入</p>
+          <label class="auth-field">
+            <span>帳號</span>
+            <input class="field" id="lg-user" name="username" type="text" autocomplete="username"
+                   autocapitalize="none" spellcheck="false" placeholder="例：meiling.wang" required>
+          </label>
+          <label class="auth-field">
+            <span>密碼</span>
+            <span class="pw-wrap">
+              <input class="field" id="lg-pass" name="password" type="password" autocomplete="current-password" required>
+              <button class="pw-toggle" id="pw-toggle" type="button" aria-label="顯示密碼" aria-pressed="false">顯示</button>
+            </span>
+          </label>
+          <div class="caps-hint" id="caps-hint" hidden>⇪ 大寫鎖定已開啟</div>
+          <div class="auth-row">
+            <label class="check"><input type="checkbox" id="lg-remember"> 記住帳號</label>
+            <button class="link-btn" id="forgot-btn" type="button">忘記密碼？</button>
+          </div>
+          <div class="auth-error" id="lg-error" role="alert" hidden></div>
+          <button class="btn btn-primary btn-block" id="lg-submit" type="submit">
+            <span class="spinner" aria-hidden="true"></span><span class="btn-label">登入</span>
+          </button>
+        </form>
+
+        <!-- 第二步：兩步驟驗證 -->
+        <form id="step-mfa" novalidate hidden>
+          <button class="link-btn auth-back" id="mfa-back" type="button">← 使用其他帳號</button>
+          <h2>兩步驟驗證</h2>
+          <p class="auth-sub" id="mfa-sub"></p>
+          <label class="auth-field">
+            <span>6 位數驗證碼</span>
+            <input class="field otp" id="mfa-code" type="text" inputmode="numeric" autocomplete="one-time-code"
+                   maxlength="6" pattern="[0-9]{6}" required>
+          </label>
+          <div class="auth-row">
+            <span class="auth-meta" id="mfa-exp"></span>
+            <button class="link-btn" id="mfa-resend" type="button">重新傳送</button>
+          </div>
+          <div class="auth-error" id="mfa-error" role="alert" hidden></div>
+          <button class="btn btn-primary btn-block" type="submit">驗證並登入</button>
+          <div class="sms-sim">
+            <div class="sms-head">模擬手機簡訊 · Demo 專用</div>
+            <div class="sms-body" id="sms-body"></div>
+          </div>
+        </form>
+
+        <p class="auth-legal">僅限長信名茶授權人員使用，所有登入行為均會記錄並供稽核。</p>
+      </div>
+
+      <section class="demo-accounts" aria-labelledby="demo-acc-title">
+        <div class="demo-accounts-head">
+          <h2 id="demo-acc-title">示範帳號</h2>
+          <span>點一下自動帶入 · 密碼皆為 <code>Evertrust#1971</code> · 主管以上需兩步驟驗證</span>
+        </div>
+        <div class="login-grid" id="login-accounts"></div>
+        <div class="login-hint">
+          <strong>想看多人同時操作？</strong>
+          把這個網址在<strong>另一個分頁</strong>開起來，用別的帳號登入 —— 登入狀態存在分頁層級，兩邊會即時互相同步，
+          同時改同一筆評核還會跳版本衝突。
+        </div>
+      </section>
     </div>
 
-    <figure class="store-strip">
-      <img src="https://cdn.store-assets.com/s/772214/f/17532769.jpg?width=900" alt="長信名茶高雄建國門市內部" loading="lazy" onerror="this.parentNode.classList.add('no-img')">
-      <figcaption>
-        <strong>五十餘年在地茶行</strong>
-        1971 年創立 · 南投山區自有茶廠 · 高雄建國一路門市 · 茶葉年年送驗合格<br>
-        <span>這套系統以長信名茶的通路、茶品與部門為情境設計</span>
-      </figcaption>
-    </figure>
-
-    <div class="login-hint">
-      <strong>想看多人同時操作？</strong>
-      把這個網址在<strong>另一個分頁</strong>開起來，用別的身分登入 —— 身分存在分頁層級，兩邊會即時互相同步，
-      同時改同一筆評核還會跳版本衝突。
-    </div>
-
-    <div class="login-grid" id="login-accounts"></div>
   </div>
 </div>
 
 <!-- ======================= 主應用 ======================= -->
-<div id="app-view" hidden>
+<div id="app-view" class="app-shell" hidden>
 
-<header class="app-header">
-  <div class="header-bar">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 33 19 20l5 6 5-8 10 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 15c-3.2-.4-5.4-2.6-5.6-5.8 3.2.2 5.4 2.4 5.6 5.8z" fill="currentColor"/></svg></div>
-      <div class="brand-text">
-        <h1>長信名茶 · 內部管理與績效系統</h1>
-        <span id="cycle-label">—</span>
-      </div>
-    </div>
-    <div class="header-actions">
-      <span class="presence" id="presence" title="同時在線的其他分頁"></span>
-      <span class="user-chip" id="current-user"></span>
-      <button class="btn btn-sm" id="switch-user" type="button">切換身分</button>
-      <button class="btn btn-sm" id="reset-demo" type="button">還原示範資料</button>
-      <button class="btn btn-sm" id="theme-toggle" type="button">☾ 深色</button>
+<aside class="sidebar" id="sidebar">
+  <div class="side-brand">
+    <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 33 19 20l5 6 5-8 10 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 15c-3.2-.4-5.4-2.6-5.6-5.8 3.2.2 5.4 2.4 5.6 5.8z" fill="currentColor"/></svg></div>
+    <div>
+      <div class="side-brand-name">長信名茶</div>
+      <div class="side-brand-sub">內部管理系統</div>
     </div>
   </div>
-  <div class="tabs" role="tablist" aria-label="系統模組">
-    <button class="tab" role="tab" aria-selected="true"  aria-controls="panel-overview"  id="tab-overview"  type="button">營運總覽</button>
-    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-perf"      id="tab-perf"      type="button">員工績效</button>
-    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-orders"    id="tab-orders"    type="button">訂單管理</button>
-    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-inventory" id="tab-inventory" type="button">茶品庫存</button>
+  <nav class="sidenav" role="tablist" aria-label="系統模組" aria-orientation="vertical">
+    <div class="nav-group" role="presentation">營運</div>
+    <button class="tab" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v4h-7zM14 10h7v11h-7zM3 13h7v8H3z"/></svg><span>營運總覽</span></button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-orders" id="tab-orders" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2zM9 7h6M9 11h6M9 15h4"/></svg><span>訂單管理</span><em class="nav-count" id="nav-count-orders" hidden></em></button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-inventory" id="tab-inventory" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10"/></svg><span>茶品庫存</span><em class="nav-count" id="nav-count-inventory" hidden></em></button>
+    <div class="nav-group" role="presentation">人資</div>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-perf" id="tab-perf" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M16 11l2 2 4-4"/></svg><span>員工績效</span><em class="nav-count" id="nav-count-perf" hidden></em></button>
+    <div class="nav-group admin-only" role="presentation">系統管理</div>
+    <button class="tab admin-only" role="tab" aria-selected="false" aria-controls="panel-accounts" id="tab-accounts" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><span>帳號與權限</span><em class="nav-count" id="nav-count-accounts" hidden></em></button>
+    <button class="tab admin-only" role="tab" aria-selected="false" aria-controls="panel-audit" id="tab-audit" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>稽核紀錄</span></button>
+  </nav>
+  <div class="side-foot">
+    <span id="cycle-label">—</span>
+    <span>v1.5 · 示範環境</span>
+  </div>
+</aside>
+<div class="side-backdrop" id="side-backdrop" hidden></div>
+
+<div class="app-body">
+<header class="topbar">
+  <button class="icon-btn only-mobile" id="nav-toggle" type="button" aria-label="開啟選單" aria-controls="sidebar" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <div class="crumbs">
+    <span id="crumb-group">營運</span><span class="crumb-sep" aria-hidden="true">/</span><strong id="crumb-page">營運總覽</strong>
+  </div>
+  <span class="spacer"></span>
+  <span class="presence" id="presence" title="同時在線的其他分頁"></span>
+  <button class="btn btn-sm hide-mobile" id="theme-toggle" type="button">☾ 深色</button>
+  <div class="menu-wrap">
+    <button class="icon-btn" id="notif-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="notif-panel" aria-label="待辦與通知"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"/></svg><span class="badge" id="notif-badge" hidden></span></button>
+    <div class="menu notif-menu" id="notif-panel" hidden>
+      <div class="menu-head menu-title">待辦與通知</div>
+      <div class="notif-list" id="notif-list"></div>
+    </div>
+  </div>
+  <div class="menu-wrap">
+    <button class="user-btn" id="user-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="user-menu">
+      <span class="avatar" id="user-avatar" aria-hidden="true"></span>
+      <span class="user-btn-text"><span id="user-name"></span><span id="user-role"></span></span>
+    </button>
+    <div class="menu user-menu" id="user-menu" hidden>
+      <div class="menu-head" id="user-menu-head"></div>
+      <button class="menu-item" id="menu-password" type="button">變更密碼</button>
+      <button class="menu-item only-mobile" id="menu-theme" type="button">切換深／淺色</button>
+      <button class="menu-item" id="reset-demo" type="button">還原示範資料</button>
+      <div class="menu-sep" role="separator"></div>
+      <button class="menu-item menu-danger" id="switch-user" type="button">登出</button>
+    </div>
   </div>
 </header>
 
@@ -299,7 +391,102 @@
     </div>
   </section>
 
+  <!-- ============ 帳號與權限（管理員） ============ -->
+  <section class="panel stack" id="panel-accounts" role="tabpanel" aria-labelledby="tab-accounts" hidden>
+    <div class="section-head" style="margin-bottom:0">
+      <div>
+        <h2>帳號與權限</h2>
+        <p>停用帳號、解除鎖定、重設密碼。所有異動都會寫入稽核紀錄，並即時同步到其他分頁。</p>
+      </div>
+    </div>
+    <div class="grid grid-kpi" id="acct-tiles"></div>
+    <div class="card" style="padding:4px 0">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>員工</th><th>帳號</th><th>權限</th><th>兩步驟驗證</th><th>狀態</th><th>上次登入</th><th>操作</th></tr></thead>
+          <tbody id="acct-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="inline-note" style="margin-top:0">
+      密碼政策：至少 10 個字元，需含大小寫英文、數字與符號，不可包含帳號名稱，不可沿用目前密碼。
+      連續失敗 5 次鎖定 5 分鐘；主管以上強制兩步驟驗證；閒置 15 分鐘自動登出。
+    </p>
+  </section>
+
+  <!-- ============ 稽核紀錄（管理員） ============ -->
+  <section class="panel" id="panel-audit" role="tabpanel" aria-labelledby="tab-audit" hidden>
+    <div class="section-head">
+      <div>
+        <h2>稽核紀錄</h2>
+        <p>登入、驗證與帳號異動的完整紀錄，保留最近 200 筆，與其他分頁共用。</p>
+      </div>
+      <button class="btn" id="audit-export" type="button">匯出 CSV</button>
+    </div>
+    <div class="toolbar">
+      <input class="field" id="audit-search" type="search" placeholder="搜尋帳號 / 姓名 / 說明" aria-label="搜尋稽核紀錄">
+      <select class="field" id="audit-event" aria-label="篩選事件"><option value="">全部事件</option></select>
+      <span class="spacer"></span>
+      <span class="result-count" id="audit-count"></span>
+    </div>
+    <div class="card" style="padding:4px 0">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>時間</th><th>帳號</th><th>事件</th><th>說明</th></tr></thead>
+          <tbody id="auth-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
 </main>
+</div>
+</div>
+
+<div class="modal-backdrop" id="idle-modal" hidden>
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="idle-title" aria-describedby="idle-desc">
+    <h2 id="idle-title">即將自動登出</h2>
+    <p id="idle-desc">你已閒置一段時間。為保護公司資料，系統將在 <strong id="idle-count">60</strong> 秒後登出。</p>
+    <div class="modal-actions">
+      <button class="btn" id="idle-logout" type="button">立即登出</button>
+      <button class="btn btn-primary" id="idle-stay" type="button">繼續使用</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="pw-modal" hidden>
+  <form class="modal" id="pw-form" role="dialog" aria-modal="true" aria-labelledby="pw-title" novalidate>
+    <h2 id="pw-title">變更密碼</h2>
+    <p class="modal-desc" id="pw-desc"></p>
+    <input type="text" id="pw-username" autocomplete="username" hidden>
+    <label class="auth-field" id="pw-current-wrap">
+      <span>目前密碼</span>
+      <input class="field" id="pw-current" type="password" autocomplete="current-password">
+    </label>
+    <label class="auth-field">
+      <span>新密碼</span>
+      <input class="field" id="pw-new" type="password" autocomplete="new-password" aria-describedby="pw-rules">
+    </label>
+    <div class="pw-meter" aria-hidden="true"><span id="pw-meter-bar"></span></div>
+    <ul class="pw-rules" id="pw-rules"></ul>
+    <label class="auth-field">
+      <span>確認新密碼</span>
+      <input class="field" id="pw-confirm" type="password" autocomplete="new-password">
+    </label>
+    <div class="auth-error" id="pw-error" role="alert" hidden></div>
+    <div class="modal-actions">
+      <button class="btn" id="pw-cancel" type="button">取消</button>
+      <button class="btn btn-primary" id="pw-submit" type="submit">更新密碼</button>
+    </div>
+  </form>
+</div>
+
+<div class="modal-backdrop" id="info-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="info-title">
+    <h2 id="info-title"></h2>
+    <div class="modal-desc" id="info-body"></div>
+    <div class="modal-actions"><button class="btn btn-primary" id="info-ok" type="button">我知道了</button></div>
+  </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>

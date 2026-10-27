@@ -47,6 +47,23 @@ const ACCESS_LEVELS = {
   admin:   { label: '系統管理員', rank: 3, note: '全部資料可見可編輯' },
 };
 
+/* ---- 登入帳號 --------------------------------------------
+   密碼不存明文：PBKDF2-SHA256、每帳號獨立 16 bytes 鹽值、10 萬次迭代
+  （OWASP 建議值等級）。mfa = 需要兩步驟驗證（主管以上強制）。
+   示範密碼一律為 Evertrust#1971，畫面上會標示。
+----------------------------------------------------------- */
+const AUTH_ITERATIONS = 100000;
+const ACCOUNTS = {
+  E01: { username: 'jiarong.chen', salt: 'e14c92fac8b7658a263d67d88176c97a', hash: '4af07ca83473c4f58c14d6ec7a7a3e7fc576655b1837a907cf76eec8e3d7c278', mfa: true },
+  E02: { username: 'zhiwei.lin', salt: '896a96e81a9da16116747ccf6fdc7027', hash: 'b1770825b0ce196e9b02d9e223d54c1379b2ae5ea70156fbdbc7ad965d364ac9', mfa: false },
+  E03: { username: 'shufen.huang', salt: '301d35559c572f47551924db07a65ab5', hash: '70e18eebd74c19d4cb0782e882cd8b9b753bc80fe213c1e157931eed4ed2c492', mfa: true },
+  E04: { username: 'jianhong.wu', salt: '6ff512ab70346bcf73707a5b700bd268', hash: '40492b442a7bb2499d853f100b586eb5cfa29a22c35062e23dc779035f854296', mfa: false },
+  E05: { username: 'yating.zhang', salt: '6ed7baf30d1f17edff1bb9f49db343e1', hash: '11652ba36d11a6984315f7efa21f1474eb1447d32e54b641385e35d42d859235', mfa: false },
+  E06: { username: 'junjie.li', salt: 'da0298066499c34faf6d7833e03c7acc', hash: 'd9c2106c0cfd85c26ad0904c697c19f27b95a8f84d7f8c6aa2c14a816a4db104', mfa: false },
+  E07: { username: 'meiling.wang', salt: '59a8e1d809c1c069dead5bca49b7cf36', hash: '0a9eeabe7fe28640092b1afaecfc384e152fd3397bf60811d38877f669e2d6af', mfa: true },
+  E08: { username: 'chenghan.tsai', salt: '01ab93d07ed449d8e1730630f3630d6a', hash: '18c52a607e3c6079fa673cc8654a3901e8a0196b8f56e7a38515099b794540b2', mfa: false },
+};
+
 /* ---- 員工 ------------------------------------------------ */
 const EMPLOYEES = [
   {
@@ -345,6 +362,6 @@ const INVENTORY = [
 
 /* 以傳統 script 載入，掛到全域命名空間，讓 file:// 直接開也能跑 */
 window.DEMO = {
-  IMG_BASE, META, TEMPLATES, ACCESS_LEVELS, WORKFLOW, CYCLE, CYCLE_STATE, AUDIT_SEED, EMPLOYEES, MONTHLY_REVENUE, LAST_YEAR_SAME_MONTH,
+  IMG_BASE, AUTH_ITERATIONS, ACCOUNTS, META, TEMPLATES, ACCESS_LEVELS, WORKFLOW, CYCLE, CYCLE_STATE, AUDIT_SEED, EMPLOYEES, MONTHLY_REVENUE, LAST_YEAR_SAME_MONTH,
   PREV_PERIOD_AVG, CHANNELS, ORDERS, INVENTORY,
 };
