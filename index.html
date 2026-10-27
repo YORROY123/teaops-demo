@@ -4,15 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>長信茶業 · 內部管理與績效系統（Demo）</title>
-<meta name="description" content="茶業公司的內部管理與員工績效系統示範：營運總覽、績效評核、訂單管理、茶品庫存。純前端、可直接試用。">
+<meta name="description" content="茶業公司的內部管理與員工績效系統示範：權限分級、評核流程、多人同時編輯、訂單與庫存管理。純前端、可直接試用。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍵</text></svg>">
 <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 
 <div class="demo-banner">
-  <strong>示範系統</strong>　畫面上所有公司、人員、訂單、金額皆為<strong>虛構資料</strong>，僅供能力展示；資料存在你自己的瀏覽器，不會上傳。
+  <strong>示範系統</strong>　所有公司、人員、訂單、金額皆為<strong>虛構資料</strong>；資料只存在你自己的瀏覽器，不會上傳。
 </div>
+
+<!-- ======================= 登入 ======================= -->
+<div id="login-view">
+  <div class="login-wrap">
+    <div class="login-head">
+      <div class="brand-mark" aria-hidden="true">茶</div>
+      <h1>內部管理與績效系統</h1>
+      <p>Demo 不設密碼，點選身分即可進入。不同身分看到的畫面與可做的事完全不同。</p>
+    </div>
+
+    <div class="login-hint">
+      <strong>想看多人同時操作？</strong>
+      把這個網址在<strong>另一個分頁</strong>開起來，用別的身分登入 —— 身分存在分頁層級，兩邊會即時互相同步，
+      同時改同一筆評核還會跳版本衝突。
+    </div>
+
+    <div class="login-grid" id="login-accounts"></div>
+  </div>
+</div>
+
+<!-- ======================= 主應用 ======================= -->
+<div id="app-view" hidden>
 
 <header class="app-header">
   <div class="header-bar">
@@ -20,12 +42,15 @@
       <div class="brand-mark" aria-hidden="true">茶</div>
       <div class="brand-text">
         <h1>長信茶業 · 內部管理與績效系統</h1>
-        <span>Demo build · 資料統計至 2026-10-27</span>
+        <span id="cycle-label">—</span>
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn" id="reset-demo" type="button">還原示範資料</button>
-      <button class="btn" id="theme-toggle" type="button">☾ 深色</button>
+      <span class="presence" id="presence" title="同時在線的其他分頁"></span>
+      <span class="user-chip" id="current-user"></span>
+      <button class="btn btn-sm" id="switch-user" type="button">切換身分</button>
+      <button class="btn btn-sm" id="reset-demo" type="button">還原示範資料</button>
+      <button class="btn btn-sm" id="theme-toggle" type="button">☾ 深色</button>
     </div>
   </div>
   <div class="tabs" role="tablist" aria-label="系統模組">
@@ -41,9 +66,9 @@
   <!-- ============ 營運總覽 ============ -->
   <section class="panel stack" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
 
-    <div class="card hero-card">
+    <div class="card hero-card" id="hero-card">
       <div>
-        <div class="hero-label">本月營收 · <span id="period-label">—</span></div>
+        <div class="hero-label"><span id="hero-title">本月營收</span> · <span id="period-label">—</span></div>
         <div class="hero-figure" id="hero-figure">—</div>
         <div class="tile-delta" id="hero-delta"></div>
         <div class="hero-sub" id="hero-sub"></div>
@@ -52,7 +77,7 @@
 
     <div class="grid grid-kpi" id="kpi-tiles"></div>
 
-    <div class="grid grid-2">
+    <div class="grid grid-2" id="company-charts">
       <div class="card">
         <div class="chart-head">
           <div>
@@ -76,12 +101,21 @@
       </div>
     </div>
 
+    <div class="card lock-card" id="charts-locked" hidden>
+      <div class="lock-icon" aria-hidden="true">🔒</div>
+      <div>
+        <div class="chart-title">公司營收圖表需要主管以上權限</div>
+        <p class="inline-note">你目前的身分是一般員工，只看得到與自己相關的數字。想看完整畫面，請切換成部門主管或系統管理員。</p>
+      </div>
+    </div>
+
     <div class="card">
       <div class="chart-title">這份 Demo 想說明的事</div>
       <p class="inline-note" style="margin-top:8px">
-        績效制度最難的不是寫程式，是「用什麼指標、誰適用哪套標準」。這裡示範了兩套評核模板：
-        業務職看業績與毛利，製茶、行政等職能職看產出與品質 —— 因為用同一張表打分數，
-        製茶師永遠不會贏業務。所有統計磚都由當前資料即時算出，你可以到其他分頁改動數字，回來看這裡一起變。
+        績效系統難的不是把表格畫出來，是三件事：<strong>誰能看到誰的分數</strong>、
+        <strong>評核要經過哪些關卡才算數</strong>、<strong>兩個人同時改同一筆資料怎麼辦</strong>。
+        這份 Demo 把這三件事都實作出來了 —— 權限分三級、評核跑五個狀態的流程、
+        存檔時做版本比對並支援跨分頁即時同步。所有統計數字都由當前資料即時算出。
       </p>
     </div>
 
@@ -92,14 +126,18 @@
     <div class="section-head">
       <div>
         <h2>員工績效評核</h2>
-        <p>加權總分 = Σ（各項分數 × 權重）。等第：A ≥ 90、B ≥ 80、C ≥ 70、D &lt; 70。</p>
+        <p id="perf-scope-note">—</p>
       </div>
-      <button class="btn" id="emp-export" type="button">匯出 CSV</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="open-cycle" type="button" hidden>開啟新評核週期</button>
+        <button class="btn" id="emp-export" type="button">匯出 CSV</button>
+      </div>
     </div>
 
     <div class="toolbar">
       <input class="field" id="emp-search" type="search" placeholder="搜尋姓名 / 職務 / 編號" aria-label="搜尋員工">
       <select class="field" id="emp-dept" aria-label="篩選部門"><option value="">全部部門</option></select>
+      <select class="field" id="emp-status" aria-label="篩選流程狀態"><option value="">全部狀態</option></select>
       <span class="spacer"></span>
       <span class="result-count" id="emp-dist"></span>
       <span class="result-count" id="emp-count"></span>
@@ -113,10 +151,10 @@
               <tr>
                 <th class="sortable" data-key="name">員工</th>
                 <th class="sortable" data-key="dept">部門</th>
-                <th>評核模板</th>
+                <th class="sortable" data-key="status">流程狀態</th>
                 <th class="sortable num" data-key="total" data-dir="desc">加權總分</th>
                 <th>等第</th>
-                <th class="sortable" data-key="hireDate">到職日</th>
+                <th class="sortable" data-key="updatedAt">最後異動</th>
               </tr>
             </thead>
             <tbody id="emp-tbody"></tbody>
@@ -132,7 +170,7 @@
     <div class="section-head">
       <div>
         <h2>訂單管理</h2>
-        <p>近期訂單抽樣。可搜尋、篩選、排序，新增的訂單會存在本機瀏覽器。</p>
+        <p id="ord-scope-note">—</p>
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn" id="ord-add-toggle" type="button">＋ 新增訂單</button>
@@ -185,7 +223,7 @@
     <div class="section-head">
       <div>
         <h2>茶品庫存</h2>
-        <p>狀態依「庫存 ÷ 安全庫存」判定：&lt; 0.6 急需補貨、&lt; 1.0 低於安全量、&lt; 1.3 接近下限。直接改最右欄的數字看狀態變化。</p>
+        <p id="inv-scope-note">—</p>
       </div>
       <button class="btn" id="inv-export" type="button">匯出 CSV</button>
     </div>
@@ -211,7 +249,7 @@
               <th class="num">安全庫存</th>
               <th class="num">單價 (元/kg)</th>
               <th>狀態</th>
-              <th>調整庫存</th>
+              <th id="inv-adjust-head">調整庫存</th>
             </tr>
           </thead>
           <tbody id="inv-tbody"></tbody>
@@ -221,6 +259,7 @@
   </section>
 
 </main>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 

@@ -38,89 +38,234 @@ const TEMPLATES = {
   },
 };
 
+/* ---- 權限等級 --------------------------------------------
+   rank 用於比較高低；可見範圍與可編輯範圍在 app.js 裡判定。
+----------------------------------------------------------- */
+const ACCESS_LEVELS = {
+  staff:   { label: '一般員工',   rank: 1, note: '只看得到自己的評核與自己負責的訂單' },
+  manager: { label: '部門主管',   rank: 2, note: '可評核所屬部門同仁，看得到營收圖表' },
+  admin:   { label: '系統管理員', rank: 3, note: '全部資料可見可編輯' },
+};
+
 /* ---- 員工 ------------------------------------------------ */
 const EMPLOYEES = [
   {
-    id: 'E01', name: '陳佳蓉', dept: '業務部', role: '資深業務專員',
+    id: 'E01', name: '陳佳蓉', dept: '業務部', role: '業務部主管',
     hireDate: '2017-03-06', template: 'sales',
+    access: 'manager', managesDept: '業務部',
     scores: { quota: 118, margin: 109, newCustomer: 125, satisfaction: 100, discipline: 100 },
     raw: {
       quota: '1,062,000 / 900,000', margin: '34.9%', newCustomer: '5 / 4',
       satisfaction: '0 件', discipline: '100%',
     },
     comment: '大宗批發客維繫穩定，本期成功把梅山烏龍導入兩家連鎖茶飲通路。議價偏守，毛利率維持得不錯。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
   {
     id: 'E02', name: '林志偉', dept: '業務部', role: '業務專員',
-    hireDate: '2022-09-12', template: 'sales',
+    hireDate: '2022-09-12', template: 'sales', access: 'staff',
     scores: { quota: 78, margin: 70, newCustomer: 75, satisfaction: 76, discipline: 96 },
     raw: {
       quota: '546,000 / 700,000', margin: '22.4%', newCustomer: '3 / 4',
       satisfaction: '3 件', discipline: '96%',
     },
     comment: '衝量意願高但讓價過快，毛利率低於目標 9.6 個百分點，是全公司最低。建議下期先鎖報價級距，再談新客。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
   {
     id: 'E03', name: '黃淑芬', dept: '門市', role: '門市主任',
     hireDate: '2015-06-01', template: 'sales',
+    access: 'manager', managesDept: '門市',
     scores: { quota: 104, margin: 115, newCustomer: 90, satisfaction: 92, discipline: 100 },
     raw: {
       quota: '624,000 / 600,000', margin: '36.8%', newCustomer: '9 / 10',
       satisfaction: '1 件', discipline: '100%',
     },
     comment: '門市客單價提升明顯，禮盒搭售成效好。中秋檔期人力排班順暢，現場零客訴升級。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
   {
     id: 'E04', name: '吳建宏', dept: '電商', role: '電商營運專員',
-    hireDate: '2023-02-20', template: 'sales',
+    hireDate: '2023-02-20', template: 'sales', access: 'staff',
     scores: { quota: 88, margin: 78, newCustomer: 120, satisfaction: 70, discipline: 92 },
     raw: {
       quota: '484,000 / 550,000', margin: '25.0%', newCustomer: '36 / 30',
       satisfaction: '3 件', discipline: '92%',
     },
     comment: '新客獲取是全公司最強，但出貨延遲造成 3 件客訴，連帶拉低滿意度分數。倉儲對單仍靠人工，是可優先自動化的環節。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
   {
     id: 'E05', name: '張雅婷', dept: '業務部', role: '外銷業務',
-    hireDate: '2019-11-04', template: 'sales',
+    hireDate: '2019-11-04', template: 'sales', access: 'staff',
     scores: { quota: 48, margin: 92, newCustomer: 50, satisfaction: 100, discipline: 98 },
     raw: {
       quota: '192,000 / 400,000', margin: '31.0%', newCustomer: '1 / 2',
       satisfaction: '0 件', discipline: '98%',
     },
     comment: '既有日本客戶續單穩定、零客訴，但業績僅達標 48%，新市場開發幾乎停滯。海外展延期是客觀因素，建議改走線上樣品寄送並重設下期目標。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
   {
     id: 'E06', name: '李俊傑', dept: '製茶廠', role: '製茶師',
-    hireDate: '2013-04-15', template: 'ops',
+    hireDate: '2013-04-15', template: 'ops', access: 'staff',
     scores: { output: 86, quality: 92, improvement: 75, teamwork: 85, discipline: 100 },
     raw: {
       output: '1,820 kg / 2,100 kg', quality: '瑕疵率 1.1%', improvement: '1 案採用',
       teamwork: '4.2 / 5', discipline: '100%',
     },
     comment: '烘焙手感穩定、全勤零遲到。本期產出未達標主因是五月春茶量能被外包稀釋。提出的萎凋槽濕度紀錄表已導入，但仍靠紙本，值得數位化。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
   {
     id: 'E07', name: '王美玲', dept: '行政', role: '會計兼行政',
     hireDate: '2016-08-22', template: 'ops',
+    access: 'admin',
     scores: { output: 90, quality: 95, improvement: 60, teamwork: 100, discipline: 98 },
     raw: {
       output: '月結準時 3 / 3 期', quality: '傳票錯誤 2 筆', improvement: '0 案採用',
       teamwork: '4.6 / 5', discipline: '98%',
     },
     comment: '月結從未延遲、跨部門配合度全公司最高。流程改善面較被動，整期零提案；可指派一項自動化主題（例如請款單數位化）當作下期目標。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
   {
     id: 'E08', name: '蔡承翰', dept: '電商', role: '行銷企劃',
-    hireDate: '2024-07-08', template: 'ops',
+    hireDate: '2024-07-08', template: 'ops', access: 'staff',
     scores: { output: 72, quality: 62, improvement: 95, teamwork: 85, discipline: 86 },
     raw: {
       output: '10 篇 / 14 篇', quality: '素材退回 5 次', improvement: '3 案採用',
       teamwork: '4.2 / 5', discipline: '86%',
     },
     comment: '中秋檔期的內容企劃帶動電商新客成長，點子最多、提案採用數最高。但素材退回 5 次、產出只達 71%，交期與規格穩定度是這期最該補的洞。',
+    version: 1, updatedBy: '系統匯入', updatedAt: '2026-10-20 09:14',
   },
 ];
+
+/* ---- 評核流程狀態機 --------------------------------------
+   自評 → 主管評核 → 複核 → 定版；定版後員工可提申訴，退回主管重評。
+   每一次轉移都寫進 history，構成稽核軌跡與歷史版本。
+----------------------------------------------------------- */
+const WORKFLOW = {
+  order: ['self', 'manager', 'review', 'final'],
+  states: {
+    self:    { label: '待自評',     hint: '等待本人填寫自評分數與自述',   chip: 'neutral'  },
+    manager: { label: '主管評核中', hint: '等待直屬主管評分',             chip: 'warning'  },
+    review:  { label: '複核中',     hint: '等待管理員複核',               chip: 'serious'  },
+    final:   { label: '已定版',     hint: '本期評核已鎖定',               chip: 'good'     },
+    appeal:  { label: '申訴中',     hint: '員工已提申訴，待主管重新評核', chip: 'critical' },
+  },
+  /* 每個動作：誰能做、從哪個狀態到哪個狀態 */
+  actions: {
+    submitSelf:   { label: '送出自評',   from: 'self',    to: 'manager', by: 'owner',   tone: 'primary' },
+    /* 員工遲遲不自評會把整個週期卡死，所以管理員要有推進的手段 */
+    skipSelf:     { label: '代為跳過自評', from: 'self',  to: 'manager', by: 'admin',   tone: 'plain'   },
+    submitReview: { label: '送出評核',   from: 'manager', to: 'review',  by: 'manager', tone: 'primary' },
+    finalize:     { label: '定版',       from: 'review',  to: 'final',   by: 'admin',   tone: 'primary' },
+    sendBack:     { label: '退回主管',   from: 'review',  to: 'manager', by: 'admin',   tone: 'plain'   },
+    appeal:       { label: '提出申訴',   from: 'final',   to: 'appeal',  by: 'owner',   tone: 'plain'   },
+    reopen:       { label: '受理並重評', from: 'appeal',  to: 'manager', by: 'manager', tone: 'primary' },
+  },
+};
+
+/* ---- 本期評核週期 ---------------------------------------- */
+const CYCLE = { period: '2026-Q4', opened: '2026-10-01', due: '2026-11-15' };
+
+/* ---- 各員工的本期流程狀態 -------------------------------- */
+const CYCLE_STATE = {
+  E01: {
+    status: 'final',
+    selfScores: { quota: 115, margin: 105, newCustomer: 120, satisfaction: 100, discipline: 100 },
+    selfComment: '本期把梅山烏龍導入兩家連鎖茶飲通路，批發線營收成長明顯。議價上盡量守住毛利，沒有為了衝量讓價。',
+    reviewNote: '自評與主管評核落差小、數據佐證充分，維持 A 等，核定為本期標竿。',
+    appealReason: '',
+  },
+  E02: {
+    status: 'manager',
+    selfScores: { quota: 85, margin: 80, newCustomer: 85, satisfaction: 85, discipline: 100 },
+    selfComment: '本期成交筆數有成長，但我承認報價給得太鬆。希望公司能給一份標準報價級距表，我才知道底線在哪。',
+    reviewNote: '',
+    appealReason: '',
+  },
+  E03: {
+    status: 'review',
+    selfScores: { quota: 100, margin: 110, newCustomer: 95, satisfaction: 90, discipline: 100 },
+    selfComment: '中秋檔期門市禮盒搭售成效好，客單價提升。排班提前兩週規劃，現場沒有開天窗。',
+    reviewNote: '',
+    appealReason: '',
+  },
+  E04: {
+    status: 'self',
+    selfScores: null, selfComment: '', reviewNote: '', appealReason: '',
+  },
+  E05: {
+    status: 'appeal',
+    selfScores: { quota: 70, margin: 95, newCustomer: 60, satisfaction: 100, discipline: 100 },
+    selfComment: '日本既有客戶續單全數守住、零客訴。新客開發確實沒達標，但主因是東京食品展延期到明年三月。',
+    reviewNote: '業績未達標屬實，惟外部因素具體可查，退回主管重新評估權重。',
+    appealReason: '業績目標是在展會確定舉辦的前提下訂的，展會延期屬不可抗力。請求將業績權重由 40% 暫調為 25%，或重設本期目標。',
+  },
+  E06: {
+    status: 'manager',
+    selfScores: { output: 95, quality: 100, improvement: 85, teamwork: 90, discipline: 100 },
+    selfComment: '冬茶首批烘焙品質有把關，瑕疵率壓在 1.1%。五月春茶外包的部分不在我控制範圍，希望產出目標能把外包量扣掉再算。',
+    reviewNote: '',
+    appealReason: '',
+  },
+  E07: {
+    status: 'final',
+    selfScores: { output: 95, quality: 100, improvement: 70, teamwork: 100, discipline: 98 },
+    selfComment: '三期月結都準時。流程改善確實沒有主動提案，主要是日常帳務就佔滿工時。',
+    reviewNote: '月結零延遲，核定 B 等。下期指派「請款單數位化」為指定改善項目，納入流程改善評分。',
+    appealReason: '',
+  },
+  E08: {
+    status: 'self',
+    selfScores: null, selfComment: '', reviewNote: '', appealReason: '',
+  },
+};
+
+/* ---- 稽核軌跡種子：[時間, 操作者, 動作, 原狀態, 新狀態, 說明] ---- */
+const AUDIT_SEED = {
+  E01: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle',    null,      'self',    '開啟 2026-Q4 評核週期'],
+    ['2026-10-06 14:22', '陳佳蓉', 'submitSelf',   'self',    'manager', '送出自評'],
+    ['2026-10-12 10:05', '王美玲', 'submitReview', 'manager', 'review',  '本人為主管，依規定由管理員代評'],
+    ['2026-10-15 16:40', '王美玲', 'finalize',     'review',  'final',   '定版，核定 A 等'],
+  ],
+  E02: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle',  null,   'self',    '開啟 2026-Q4 評核週期'],
+    ['2026-10-08 11:30', '林志偉', 'submitSelf', 'self', 'manager', '送出自評'],
+  ],
+  E03: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle',    null,      'self',    '開啟 2026-Q4 評核週期'],
+    ['2026-10-05 09:48', '黃淑芬', 'submitSelf',   'self',    'manager', '送出自評'],
+    ['2026-10-14 15:12', '王美玲', 'submitReview', 'manager', 'review',  '本人為主管，依規定由管理員代評'],
+  ],
+  E04: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle', null, 'self', '開啟 2026-Q4 評核週期'],
+  ],
+  E05: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle',    null,      'self',    '開啟 2026-Q4 評核週期'],
+    ['2026-10-07 13:05', '張雅婷', 'submitSelf',   'self',    'manager', '送出自評'],
+    ['2026-10-13 09:20', '陳佳蓉', 'submitReview', 'manager', 'review',  '主管評核完成'],
+    ['2026-10-16 11:00', '王美玲', 'finalize',     'review',  'final',   '定版，核定 D 等'],
+    ['2026-10-21 17:35', '張雅婷', 'appeal',       'final',   'appeal',  '提出申訴：展會延期屬不可抗力'],
+  ],
+  E06: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle',  null,   'self',    '開啟 2026-Q4 評核週期'],
+    ['2026-10-09 08:15', '李俊傑', 'submitSelf', 'self', 'manager', '送出自評'],
+  ],
+  E07: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle',    null,      'self',    '開啟 2026-Q4 評核週期'],
+    ['2026-10-04 16:50', '王美玲', 'submitSelf',   'self',    'manager', '送出自評'],
+    ['2026-10-11 10:30', '王美玲', 'submitReview', 'manager', 'review',  '主管評核完成'],
+    ['2026-10-15 16:45', '王美玲', 'finalize',     'review',  'final',   '定版，核定 B 等'],
+  ],
+  E08: [
+    ['2026-10-01 09:00', '王美玲', 'openCycle', null, 'self', '開啟 2026-Q4 評核週期'],
+  ],
+};
 
 /* ---- 月營收（近 12 個月，單位：元） ---------------------- */
 const MONTHLY_REVENUE = [
@@ -195,6 +340,6 @@ const INVENTORY = [
 
 /* 以傳統 script 載入，掛到全域命名空間，讓 file:// 直接開也能跑 */
 window.DEMO = {
-  META, TEMPLATES, EMPLOYEES, MONTHLY_REVENUE, LAST_YEAR_SAME_MONTH,
+  META, TEMPLATES, ACCESS_LEVELS, WORKFLOW, CYCLE, CYCLE_STATE, AUDIT_SEED, EMPLOYEES, MONTHLY_REVENUE, LAST_YEAR_SAME_MONTH,
   PREV_PERIOD_AVG, CHANNELS, ORDERS, INVENTORY,
 };
