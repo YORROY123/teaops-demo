@@ -6,6 +6,9 @@
 <title>長信名茶 · 內部管理與績效系統（Demo）</title>
 <meta name="description" content="茶業公司的內部管理與員工績效系統示範：權限分級、評核流程、多人同時編輯、訂單與庫存管理。純前端、可直接試用。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍵</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
@@ -18,10 +21,48 @@
 <div id="login-view">
   <div class="login-wrap">
     <div class="login-head">
-      <div class="brand-mark" aria-hidden="true">茶</div>
-      <h1>內部管理與績效系統</h1>
-      <p>Demo 不設密碼，點選身分即可進入。不同身分看到的畫面與可做的事完全不同。</p>
+      <svg class="landscape" viewBox="0 0 1200 340" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="ls-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#c6dcec"/><stop offset=".55" stop-color="#e9f1f1"/><stop offset="1" stop-color="#f4f3ec"/>
+          </linearGradient>
+          <radialGradient id="ls-sun" cx=".12" cy=".05" r=".45">
+            <stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="ls-mist" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f4f6f2" stop-opacity="0"/><stop offset="1" stop-color="#f4f6f2" stop-opacity=".9"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="340" fill="url(#ls-sky)"/>
+        <rect width="1200" height="340" fill="url(#ls-sun)"/>
+        <path d="M0 205c120-38 220-56 330-31s190-38 310-6 220-42 340-7 160-14 220-6v185H0z" fill="#c3d1cf"/>
+        <rect y="170" width="1200" height="70" fill="url(#ls-mist)"/>
+        <path d="M0 244c90-30 170-44 260-24s170-14 260 12l40 8c90-25 200-60 320-35s200 10 320-5v140H0z" fill="#8ea385"/>
+        <path d="M0 272c200-26 380-28 560-14s340-8 640-20v102H0z" fill="#5f7a45"/>
+        <path d="M0 292c260-34 600-40 1200-26v100H0z" fill="#6f8c47"/>
+        <g fill="none" stroke="#4d6a32" stroke-width="5" stroke-linecap="round" opacity=".55">
+          <path d="M-20 300q620-52 1240-34"/><path d="M-20 314q620-50 1240-30"/><path d="M-20 329q620-48 1240-26"/>
+        </g>
+      </svg>
+      <div class="login-head-text">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 33 19 20l5 6 5-8 10 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 15c-3.2-.4-5.4-2.6-5.6-5.8 3.2.2 5.4 2.4 5.6 5.8z" fill="currentColor"/></svg></div>
+          <div class="brand-name">長信名茶<small>Ever Trust Tea · Since 1971</small></div>
+        </div>
+        <h1>內部管理與績效系統</h1>
+        <div class="leaf-rule" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 14C3 12 2 7 4 2c4 1 7 5 4 12zm0 0V6" fill="currentColor" stroke="currentColor" stroke-width=".6"/></svg></div>
+        <p>Demo 不設密碼，點選身分即可進入。不同身分看到的畫面與可做的事完全不同。</p>
+      </div>
     </div>
+
+    <figure class="store-strip">
+      <img src="https://cdn.store-assets.com/s/772214/f/17532769.jpg?width=900" alt="長信名茶高雄建國門市內部" loading="lazy" onerror="this.parentNode.classList.add('no-img')">
+      <figcaption>
+        <strong>五十餘年在地茶行</strong>
+        1971 年創立 · 南投山區自有茶廠 · 高雄建國一路門市 · 茶葉年年送驗合格<br>
+        <span>這套系統以長信名茶的通路、茶品與部門為情境設計</span>
+      </figcaption>
+    </figure>
 
     <div class="login-hint">
       <strong>想看多人同時操作？</strong>
@@ -39,7 +80,7 @@
 <header class="app-header">
   <div class="header-bar">
     <div class="brand">
-      <div class="brand-mark" aria-hidden="true">茶</div>
+      <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 33 19 20l5 6 5-8 10 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 15c-3.2-.4-5.4-2.6-5.6-5.8 3.2.2 5.4 2.4 5.6 5.8z" fill="currentColor"/></svg></div>
       <div class="brand-text">
         <h1>長信名茶 · 內部管理與績效系統</h1>
         <span id="cycle-label">—</span>

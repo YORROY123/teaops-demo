@@ -669,7 +669,8 @@
     $('#charts-locked').hidden = full;
     $('#period-label').textContent = D.META.period;
 
-    var lowStock = state.inventory.filter(function (r) { return r.stock < r.safety; });
+    var lowStock = state.inventory.filter(function (r) { return r.stock < r.safety; })
+      .sort(function (a, b) { return a.stock / a.safety - b.stock / b.safety; });
     var tiles;
 
     if (full) {
@@ -1436,8 +1437,16 @@
 
       tbody.appendChild(el('tr', null, [
         el('td', null, [
-          el('div', { text: r.name }),
-          el('div', { class: 'cell-sub', text: r.sku + ' · ' + r.lot }),
+          el('div', { class: 'tea-cell' }, [
+            r.img ? el('img', {
+              class: 'tea-thumb', src: D.IMG_BASE + r.img + '?width=120', alt: '', loading: 'lazy',
+              onerror: function () { this.remove(); },
+            }) : null,
+            el('div', null, [
+              el('div', { text: r.name }),
+              el('div', { class: 'cell-sub', text: r.sku + ' · ' + r.lot }),
+            ]),
+          ]),
         ]),
         el('td', { text: r.origin }),
         el('td', { text: r.grade }),

@@ -323,26 +323,28 @@ const ORDERS = [
   { id: 'SO-26100125', date: '2026-10-08', customer: '沐光旅店',       channel: '批發', item: '冬片包種茶 (25kg)', amount: 67500, status: '待付款', owner: '林志偉' },
 ];
 
-/* ---- 茶品庫存（品項對照長信名茶官網茶葉專區；數量、價格為虛構） ---- */
+/* ---- 茶品庫存（品項與商品圖對照長信名茶官網茶葉專區；數量、價格為虛構）
+   img 為官網 CDN 圖片路徑，離線開啟時載不到會自動隱藏 ---- */
+const IMG_BASE = 'https://cdn.store-assets.com/s/772214/';
 const INVENTORY = [
-  { sku: 'TEA-001', name: '阿里山烏龍茶',     origin: '嘉義 · 阿里山', grade: '特級', lot: 'L2604-07', stock: 186, safety: 120, unitPrice: 5200,  lastIn: '2026-05-12' },
-  { sku: 'TEA-002', name: '杉林溪番仔田茶',   origin: '南投 · 竹山',   grade: '特級', lot: 'L2604-11', stock: 94,  safety: 100, unitPrice: 6500,  lastIn: '2026-05-18' },
-  { sku: 'TEA-003', name: '梨山烏龍茶',       origin: '台中 · 梨山',   grade: '極品', lot: 'L2512-02', stock: 31,  safety: 60,  unitPrice: 9800,  lastIn: '2025-12-20' },
-  { sku: 'TEA-004', name: '凍頂烏龍茶',       origin: '南投 · 鹿谷',   grade: '一級', lot: 'L2605-03', stock: 420, safety: 200, unitPrice: 2850,  lastIn: '2026-05-26' },
-  { sku: 'TEA-005', name: '石棹春茶',         origin: '嘉義 · 石棹',   grade: '一級', lot: 'L2604-15', stock: 512, safety: 250, unitPrice: 2300,  lastIn: '2026-05-08' },
-  { sku: 'TEA-006', name: '頂級東方美人',     origin: '新竹 · 北埔',   grade: '特級', lot: 'L2606-09', stock: 46,  safety: 40,  unitPrice: 9800,  lastIn: '2026-06-28' },
-  { sku: 'TEA-007', name: '日月潭紅玉（台茶18號）', origin: '南投 · 魚池', grade: '特級', lot: 'L2608-04', stock: 158, safety: 110, unitPrice: 3700, lastIn: '2026-08-10' },
-  { sku: 'TEA-008', name: '蜜香紅烏龍',       origin: '台東 · 鹿野',   grade: '一級', lot: 'L2607-05', stock: 72,  safety: 80,  unitPrice: 4100,  lastIn: '2026-07-22' },
-  { sku: 'TEA-009', name: '冬片包種茶',       origin: '新北 · 坪林',   grade: '一級', lot: 'L2512-14', stock: 228, safety: 150, unitPrice: 2700,  lastIn: '2025-12-30' },
-  { sku: 'TEA-010', name: '南投武界烏龍（冬片）', origin: '南投 · 仁愛', grade: '特級', lot: 'L2512-21', stock: 61, safety: 70, unitPrice: 4800, lastIn: '2025-12-29' },
-  { sku: 'TEA-011', name: '大禹嶺烏龍茶',     origin: '台中 · 和平',   grade: '極品', lot: 'L2606-02', stock: 38,  safety: 30,  unitPrice: 16000, lastIn: '2026-06-17' },
-  { sku: 'TEA-012', name: '華岡水源頭高冷茶', origin: '南投 · 仁愛',   grade: '極品', lot: 'L2605-08', stock: 22,  safety: 15,  unitPrice: 15000, lastIn: '2026-05-21' },
-  { sku: 'TEA-013', name: '梨山芽尖紅茶',     origin: '台中 · 梨山',   grade: '特級', lot: 'L2607-11', stock: 64,  safety: 40,  unitPrice: 7800,  lastIn: '2026-07-15' },
-  { sku: 'TEA-014', name: '雲南宮廷普洱',     origin: '雲南 · 勐海',   grade: '陳年', lot: 'L1603-01', stock: 24,  safety: 15,  unitPrice: 12000, lastIn: '2024-03-15' },
+  { sku: 'TEA-001', img: 'i/35230008.png', name: '阿里山烏龍茶',     origin: '嘉義 · 阿里山', grade: '特級', lot: 'L2604-07', stock: 186, safety: 120, unitPrice: 5200,  lastIn: '2026-05-12' },
+  { sku: 'TEA-002', img: 'i/73862923.png', name: '杉林溪番仔田茶',   origin: '南投 · 竹山',   grade: '特級', lot: 'L2604-11', stock: 94,  safety: 100, unitPrice: 6500,  lastIn: '2026-05-18' },
+  { sku: 'TEA-003', img: 'i/37883167.png', name: '梨山烏龍茶',       origin: '台中 · 梨山',   grade: '極品', lot: 'L2512-02', stock: 31,  safety: 60,  unitPrice: 9800,  lastIn: '2025-12-20' },
+  { sku: 'TEA-004', img: 'i/35236052.png', name: '凍頂烏龍茶',       origin: '南投 · 鹿谷',   grade: '一級', lot: 'L2605-03', stock: 420, safety: 200, unitPrice: 2850,  lastIn: '2026-05-26' },
+  { sku: 'TEA-005', img: 'i/70122066.png', name: '石棹春茶',         origin: '嘉義 · 石棹',   grade: '一級', lot: 'L2604-15', stock: 512, safety: 250, unitPrice: 2300,  lastIn: '2026-05-08' },
+  { sku: 'TEA-006', img: 'i/72585905.png', name: '頂級東方美人',     origin: '新竹 · 北埔',   grade: '特級', lot: 'L2606-09', stock: 46,  safety: 40,  unitPrice: 9800,  lastIn: '2026-06-28' },
+  { sku: 'TEA-007', img: 'i/85664046.png', name: '日月潭紅玉（台茶18號）', origin: '南投 · 魚池', grade: '特級', lot: 'L2608-04', stock: 158, safety: 110, unitPrice: 3700, lastIn: '2026-08-10' },
+  { sku: 'TEA-008', img: 'i/100848345.png', name: '蜜香紅烏龍',       origin: '台東 · 鹿野',   grade: '一級', lot: 'L2607-05', stock: 72,  safety: 80,  unitPrice: 4100,  lastIn: '2026-07-22' },
+  { sku: 'TEA-009', img: 'i/99066376.png', name: '冬片包種茶',       origin: '新北 · 坪林',   grade: '一級', lot: 'L2512-14', stock: 228, safety: 150, unitPrice: 2700,  lastIn: '2025-12-30' },
+  { sku: 'TEA-010', img: 'i/35236359.png', name: '南投武界烏龍（冬片）', origin: '南投 · 仁愛', grade: '特級', lot: 'L2512-21', stock: 61, safety: 70, unitPrice: 4800, lastIn: '2025-12-29' },
+  { sku: 'TEA-011', img: 'i/37290977.png', name: '大禹嶺烏龍茶',     origin: '台中 · 和平',   grade: '極品', lot: 'L2606-02', stock: 38,  safety: 30,  unitPrice: 16000, lastIn: '2026-06-17' },
+  { sku: 'TEA-012', img: 'i/77447555.png', name: '華岡水源頭高冷茶', origin: '南投 · 仁愛',   grade: '極品', lot: 'L2605-08', stock: 22,  safety: 15,  unitPrice: 15000, lastIn: '2026-05-21' },
+  { sku: 'TEA-013', img: 'i/86733593.png', name: '梨山芽尖紅茶',     origin: '台中 · 梨山',   grade: '特級', lot: 'L2607-11', stock: 64,  safety: 40,  unitPrice: 7800,  lastIn: '2026-07-15' },
+  { sku: 'TEA-014', img: 'i/107921698.png', name: '雲南宮廷普洱',     origin: '雲南 · 勐海',   grade: '陳年', lot: 'L1603-01', stock: 24,  safety: 15,  unitPrice: 12000, lastIn: '2024-03-15' },
 ];
 
 /* 以傳統 script 載入，掛到全域命名空間，讓 file:// 直接開也能跑 */
 window.DEMO = {
-  META, TEMPLATES, ACCESS_LEVELS, WORKFLOW, CYCLE, CYCLE_STATE, AUDIT_SEED, EMPLOYEES, MONTHLY_REVENUE, LAST_YEAR_SAME_MONTH,
+  IMG_BASE, META, TEMPLATES, ACCESS_LEVELS, WORKFLOW, CYCLE, CYCLE_STATE, AUDIT_SEED, EMPLOYEES, MONTHLY_REVENUE, LAST_YEAR_SAME_MONTH,
   PREV_PERIOD_AVG, CHANNELS, ORDERS, INVENTORY,
 };
