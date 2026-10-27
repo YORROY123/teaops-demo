@@ -1,5 +1,5 @@
 /* ===========================================================
-   長信茶業 內部管理與績效系統 — Demo
+   長信名茶 內部管理與績效系統 — Demo
    傳統 script（非 ES module），file:// 直接開也能運作。
 
    三個重點：
@@ -12,8 +12,8 @@
   'use strict';
 
   var D = window.DEMO;
-  var STORE_KEY = 'teaops-demo-v2';
-  var SESSION_KEY = 'teaops-session-v2';
+  var STORE_KEY = 'teaops-demo-v3';
+  var SESSION_KEY = 'teaops-session-v3';
   var THEME_KEY = 'teaops-theme';
   var TAB_ID = Math.random().toString(36).slice(2, 9);
 

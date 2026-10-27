@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>長信茶業 · 內部管理與績效系統（Demo）</title>
+<title>長信名茶 · 內部管理與績效系統（Demo）</title>
 <meta name="description" content="茶業公司的內部管理與員工績效系統示範：權限分級、評核流程、多人同時編輯、訂單與庫存管理。純前端、可直接試用。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍵</text></svg>">
 <link rel="stylesheet" href="assets/styles.css">
@@ -11,7 +11,7 @@
 <body>
 
 <div class="demo-banner">
-  <strong>示範系統</strong>　所有公司、人員、訂單、金額皆為<strong>虛構資料</strong>；資料只存在你自己的瀏覽器，不會上傳。
+  <strong>示範系統</strong>　公司與茶品情境參考長信名茶官網公開資訊，人員、訂單、金額、績效皆為<strong>虛構資料</strong>；資料只存在你自己的瀏覽器，不會上傳。
 </div>
 
 <!-- ======================= 登入 ======================= -->
@@ -41,7 +41,7 @@
     <div class="brand">
       <div class="brand-mark" aria-hidden="true">茶</div>
       <div class="brand-text">
-        <h1>長信茶業 · 內部管理與績效系統</h1>
+        <h1>長信名茶 · 內部管理與績效系統</h1>
         <span id="cycle-label">—</span>
       </div>
     </div>
@@ -181,7 +181,7 @@
     <form class="card" id="ord-form" hidden style="margin-bottom:16px">
       <div class="form-grid">
         <label>客戶名稱<input class="field" id="ord-f-customer" type="text" placeholder="例：青禾茶館" required></label>
-        <label>品項<input class="field" id="ord-f-item" type="text" placeholder="例：金萱 (20kg)" required></label>
+        <label>品項<input class="field" id="ord-f-item" type="text" placeholder="例：凍頂烏龍茶 (20kg)" required></label>
         <label>金額（元）<input class="field" id="ord-f-amount" type="number" min="1" step="1" placeholder="46000" required></label>
         <label>通路<select class="field" id="ord-f-channel"></select></label>
         <label>狀態<select class="field" id="ord-f-status"></select></label>
