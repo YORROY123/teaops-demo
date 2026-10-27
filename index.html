@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>長信茶業 · 內部管理與績效系統（Demo）</title>
+<meta name="description" content="茶業公司的內部管理與員工績效系統示範：營運總覽、績效評核、訂單管理、茶品庫存。純前端、可直接試用。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍵</text></svg>">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="demo-banner">
+  <strong>示範系統</strong>　畫面上所有公司、人員、訂單、金額皆為<strong>虛構資料</strong>，僅供能力展示；資料存在你自己的瀏覽器，不會上傳。
+</div>
+
+<header class="app-header">
+  <div class="header-bar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">茶</div>
+      <div class="brand-text">
+        <h1>長信茶業 · 內部管理與績效系統</h1>
+        <span>Demo build · 資料統計至 2026-10-27</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn" id="reset-demo" type="button">還原示範資料</button>
+      <button class="btn" id="theme-toggle" type="button">☾ 深色</button>
+    </div>
+  </div>
+  <div class="tabs" role="tablist" aria-label="系統模組">
+    <button class="tab" role="tab" aria-selected="true"  aria-controls="panel-overview"  id="tab-overview"  type="button">營運總覽</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-perf"      id="tab-perf"      type="button">員工績效</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-orders"    id="tab-orders"    type="button">訂單管理</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-inventory" id="tab-inventory" type="button">茶品庫存</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ 營運總覽 ============ -->
+  <section class="panel stack" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+
+    <div class="card hero-card">
+      <div>
+        <div class="hero-label">本月營收 · <span id="period-label">—</span></div>
+        <div class="hero-figure" id="hero-figure">—</div>
+        <div class="tile-delta" id="hero-delta"></div>
+        <div class="hero-sub" id="hero-sub"></div>
+      </div>
+    </div>
+
+    <div class="grid grid-kpi" id="kpi-tiles"></div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">月營收趨勢</div>
+            <div class="chart-note">近 12 個月 · 滑鼠移入或用方向鍵查看單月</div>
+          </div>
+          <button class="btn btn-sm" id="revenue-table-btn" type="button" aria-expanded="false">表格檢視</button>
+        </div>
+        <div class="chart-wrap" id="chart-revenue"></div>
+      </div>
+
+      <div class="card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">本月通路營收</div>
+            <div class="chart-note">與員工個人業績對帳後的數字</div>
+          </div>
+          <button class="btn btn-sm" id="channel-table-btn" type="button" aria-expanded="false">表格檢視</button>
+        </div>
+        <div class="chart-wrap" id="chart-channel"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chart-title">這份 Demo 想說明的事</div>
+      <p class="inline-note" style="margin-top:8px">
+        績效制度最難的不是寫程式，是「用什麼指標、誰適用哪套標準」。這裡示範了兩套評核模板：
+        業務職看業績與毛利，製茶、行政等職能職看產出與品質 —— 因為用同一張表打分數，
+        製茶師永遠不會贏業務。所有統計磚都由當前資料即時算出，你可以到其他分頁改動數字，回來看這裡一起變。
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ============ 員工績效 ============ -->
+  <section class="panel" id="panel-perf" role="tabpanel" aria-labelledby="tab-perf" hidden>
+    <div class="section-head">
+      <div>
+        <h2>員工績效評核</h2>
+        <p>加權總分 = Σ（各項分數 × 權重）。等第：A ≥ 90、B ≥ 80、C ≥ 70、D &lt; 70。</p>
+      </div>
+      <button class="btn" id="emp-export" type="button">匯出 CSV</button>
+    </div>
+
+    <div class="toolbar">
+      <input class="field" id="emp-search" type="search" placeholder="搜尋姓名 / 職務 / 編號" aria-label="搜尋員工">
+      <select class="field" id="emp-dept" aria-label="篩選部門"><option value="">全部部門</option></select>
+      <span class="spacer"></span>
+      <span class="result-count" id="emp-dist"></span>
+      <span class="result-count" id="emp-count"></span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="card" style="padding:4px 0">
+        <div class="table-scroll">
+          <table>
+            <thead id="emp-thead">
+              <tr>
+                <th class="sortable" data-key="name">員工</th>
+                <th class="sortable" data-key="dept">部門</th>
+                <th>評核模板</th>
+                <th class="sortable num" data-key="total" data-dir="desc">加權總分</th>
+                <th>等第</th>
+                <th class="sortable" data-key="hireDate">到職日</th>
+              </tr>
+            </thead>
+            <tbody id="emp-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" id="emp-detail"></div>
+    </div>
+  </section>
+
+  <!-- ============ 訂單管理 ============ -->
+  <section class="panel" id="panel-orders" role="tabpanel" aria-labelledby="tab-orders" hidden>
+    <div class="section-head">
+      <div>
+        <h2>訂單管理</h2>
+        <p>近期訂單抽樣。可搜尋、篩選、排序，新增的訂單會存在本機瀏覽器。</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn" id="ord-add-toggle" type="button">＋ 新增訂單</button>
+        <button class="btn" id="ord-export" type="button">匯出 CSV</button>
+      </div>
+    </div>
+
+    <form class="card" id="ord-form" hidden style="margin-bottom:16px">
+      <div class="form-grid">
+        <label>客戶名稱<input class="field" id="ord-f-customer" type="text" placeholder="例：青禾茶館" required></label>
+        <label>品項<input class="field" id="ord-f-item" type="text" placeholder="例：金萱 (20kg)" required></label>
+        <label>金額（元）<input class="field" id="ord-f-amount" type="number" min="1" step="1" placeholder="46000" required></label>
+        <label>通路<select class="field" id="ord-f-channel"></select></label>
+        <label>狀態<select class="field" id="ord-f-status"></select></label>
+        <label>負責業務<select class="field" id="ord-f-owner"></select></label>
+      </div>
+      <div style="margin-top:12px"><button class="btn btn-primary" type="submit">建立訂單</button></div>
+    </form>
+
+    <div class="toolbar">
+      <input class="field" id="ord-search" type="search" placeholder="搜尋訂單編號 / 客戶 / 品項" aria-label="搜尋訂單">
+      <select class="field" id="ord-status" aria-label="篩選狀態"><option value="">全部狀態</option></select>
+      <select class="field" id="ord-channel" aria-label="篩選通路"><option value="">全部通路</option></select>
+      <span class="spacer"></span>
+      <span class="result-count" id="ord-count"></span>
+    </div>
+
+    <div class="card" style="padding:4px 0">
+      <div class="table-scroll">
+        <table>
+          <thead id="ord-thead">
+            <tr>
+              <th class="sortable" data-key="id">訂單編號</th>
+              <th class="sortable" data-key="date" data-dir="desc">日期</th>
+              <th class="sortable" data-key="customer">客戶</th>
+              <th class="sortable" data-key="channel">通路</th>
+              <th>品項</th>
+              <th class="sortable num" data-key="amount">金額</th>
+              <th>狀態</th>
+            </tr>
+          </thead>
+          <tbody id="ord-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 茶品庫存 ============ -->
+  <section class="panel" id="panel-inventory" role="tabpanel" aria-labelledby="tab-inventory" hidden>
+    <div class="section-head">
+      <div>
+        <h2>茶品庫存</h2>
+        <p>狀態依「庫存 ÷ 安全庫存」判定：&lt; 0.6 急需補貨、&lt; 1.0 低於安全量、&lt; 1.3 接近下限。直接改最右欄的數字看狀態變化。</p>
+      </div>
+      <button class="btn" id="inv-export" type="button">匯出 CSV</button>
+    </div>
+
+    <div class="toolbar">
+      <input class="field" id="inv-search" type="search" placeholder="搜尋品名 / 產地 / 批號" aria-label="搜尋茶品">
+      <label style="display:flex;align-items:center;gap:6px;font-size:13.5px">
+        <input type="checkbox" id="inv-low"> 只看低於安全庫存
+      </label>
+      <span class="spacer"></span>
+      <span class="result-count" id="inv-count"></span>
+    </div>
+
+    <div class="card" style="padding:4px 0">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>品名</th>
+              <th>產地</th>
+              <th>等級</th>
+              <th class="num">庫存 (kg)</th>
+              <th class="num">安全庫存</th>
+              <th class="num">單價 (元/kg)</th>
+              <th>狀態</th>
+              <th>調整庫存</th>
+            </tr>
+          </thead>
+          <tbody id="inv-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
