@@ -149,6 +149,9 @@
     <button class="tab" role="tab" aria-selected="true" aria-controls="panel-overview" id="tab-overview" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v4h-7zM14 10h7v11h-7zM3 13h7v8H3z"/></svg><span>營運總覽</span></button>
     <button class="tab" role="tab" aria-selected="false" aria-controls="panel-orders" id="tab-orders" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2zM9 7h6M9 11h6M9 15h4"/></svg><span>訂單管理</span><em class="nav-count" id="nav-count-orders" hidden></em></button>
     <button class="tab" role="tab" aria-selected="false" aria-controls="panel-inventory" id="tab-inventory" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10"/></svg><span>茶品庫存</span><em class="nav-count" id="nav-count-inventory" hidden></em></button>
+    <div class="nav-group" role="presentation">流程與報表</div>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-approvals" id="tab-approvals" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l1 3H8zM6 5H4v16h16V5h-2"/><path d="M8 13l3 3 5-6"/></svg><span>簽核中心</span><em class="nav-count" id="nav-count-approvals" hidden></em></button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="panel-reports" id="tab-reports" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V4M4 20h16M8 16v-5M12 16V8M16 16v-3M20 16V6"/></svg><span>報表中心</span></button>
     <div class="nav-group" role="presentation">人資</div>
     <button class="tab" role="tab" aria-selected="false" aria-controls="panel-perf" id="tab-perf" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M16 11l2 2 4-4"/></svg><span>員工績效</span><em class="nav-count" id="nav-count-perf" hidden></em></button>
     <div class="nav-group admin-only" role="presentation">系統管理</div>
@@ -157,7 +160,7 @@
   </nav>
   <div class="side-foot">
     <span id="cycle-label">—</span>
-    <span>v1.5 · 示範環境</span>
+    <span>v2.0 · 示範環境</span>
   </div>
 </aside>
 <div class="side-backdrop" id="side-backdrop" hidden></div>
@@ -168,6 +171,10 @@
   <div class="crumbs">
     <span id="crumb-group">營運</span><span class="crumb-sep" aria-hidden="true">/</span><strong id="crumb-page">營運總覽</strong>
   </div>
+  <button class="search-btn" id="search-open" type="button" aria-label="全文檢索（Ctrl + K）">
+    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <span class="search-btn-text">搜尋訂單、茶品、同仁、簽核單…</span><kbd>Ctrl K</kbd>
+  </button>
   <span class="spacer"></span>
   <span class="presence" id="presence" title="同時在線的其他分頁"></span>
   <button class="btn btn-sm hide-mobile" id="theme-toggle" type="button">☾ 深色</button>
@@ -249,6 +256,9 @@
         <strong>評核要經過哪些關卡才算數</strong>、<strong>兩個人同時改同一筆資料怎麼辦</strong>。
         這份 Demo 把這三件事都實作出來了 —— 權限分三級、評核跑五個狀態的流程、
         存檔時做版本比對並支援跨分頁即時同步。所有統計數字都由當前資料即時算出。
+        另外也做了一套完整的資料管理：每筆訂單與茶品都有<strong>表單頁、關聯資料、欄位級版本紀錄與留言</strong>，
+        加上<strong>依金額自動分流的簽核</strong>、<strong>樞紐分析報表</strong>、<strong>Ctrl + K 全文檢索</strong>、
+        <strong>Excel 匯入</strong>與<strong>出貨單列印</strong>。
       </p>
     </div>
 
@@ -305,49 +315,100 @@
         <h2>訂單管理</h2>
         <p id="ord-scope-note">—</p>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn" id="ord-add-toggle" type="button">＋ 新增訂單</button>
-        <button class="btn" id="ord-export" type="button">匯出 CSV</button>
+      <div class="head-actions">
+        <button class="btn" id="ord-import" type="button">匯入 Excel／CSV</button>
+        <button class="btn" id="ord-export" type="button">匯出</button>
+        <button class="btn btn-primary" id="ord-add-toggle" type="button">＋ 新增訂單</button>
       </div>
     </div>
 
-    <form class="card" id="ord-form" hidden style="margin-bottom:16px">
+    <form class="card form-card" id="ord-form" hidden>
+      <div class="form-card-head">
+        <h3>新增訂單</h3>
+        <span class="cell-sub">選茶品會自動帶入品項與建議金額；建立後會開啟這筆的表單頁</span>
+      </div>
       <div class="form-grid">
         <label>客戶名稱<input class="field" id="ord-f-customer" type="text" placeholder="例：青禾茶館" required></label>
-        <label>品項<input class="field" id="ord-f-item" type="text" placeholder="例：凍頂烏龍茶 (20kg)" required></label>
+        <label>茶品（關聯庫存）<select class="field" id="ord-f-sku"><option value="">（客製品項）</option></select></label>
+        <label>品項說明<input class="field" id="ord-f-item" type="text" placeholder="例：凍頂烏龍茶 (20kg)" required></label>
         <label>金額（元）<input class="field" id="ord-f-amount" type="number" min="1" step="1" placeholder="46000" required></label>
         <label>通路<select class="field" id="ord-f-channel"></select></label>
         <label>狀態<select class="field" id="ord-f-status"></select></label>
         <label>負責業務<select class="field" id="ord-f-owner"></select></label>
       </div>
-      <div style="margin-top:12px"><button class="btn btn-primary" type="submit">建立訂單</button></div>
+      <div class="action-row">
+        <button class="btn btn-primary" type="submit">建立訂單</button>
+        <button class="btn" id="ord-f-cancel" type="button">取消</button>
+      </div>
     </form>
 
-    <div class="toolbar">
-      <input class="field" id="ord-search" type="search" placeholder="搜尋訂單編號 / 客戶 / 品項" aria-label="搜尋訂單">
-      <select class="field" id="ord-status" aria-label="篩選狀態"><option value="">全部狀態</option></select>
-      <select class="field" id="ord-channel" aria-label="篩選通路"><option value="">全部通路</option></select>
-      <span class="spacer"></span>
-      <span class="result-count" id="ord-count"></span>
-    </div>
-
-    <div class="card" style="padding:4px 0">
-      <div class="table-scroll">
-        <table>
-          <thead id="ord-thead">
-            <tr>
-              <th class="sortable" data-key="id">訂單編號</th>
-              <th class="sortable" data-key="date" data-dir="desc">日期</th>
-              <th class="sortable" data-key="customer">客戶</th>
-              <th class="sortable" data-key="channel">通路</th>
-              <th>品項</th>
-              <th class="sortable num" data-key="amount">金額</th>
-              <th>狀態</th>
-            </tr>
-          </thead>
-          <tbody id="ord-tbody"></tbody>
-        </table>
+    <div class="card list-card">
+      <div class="list-head">
+        <div class="list-tools">
+          <label class="view-pick">
+            <span class="sr-only">檢視</span>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+            <select class="field" id="ord-view" aria-label="選擇檢視"></select>
+          </label>
+          <button class="btn btn-sm" id="ord-view-save" type="button">儲存檢視</button>
+          <button class="btn btn-sm" id="ord-view-del" type="button" hidden>刪除檢視</button>
+          <form class="view-form" id="ord-view-form" hidden>
+            <input class="field" id="ord-view-name" type="text" maxlength="20" placeholder="檢視名稱，例：我的大客戶" aria-label="檢視名稱">
+            <button class="btn btn-sm btn-primary" type="submit">儲存</button>
+          </form>
+          <span class="spacer"></span>
+          <div class="seg" id="ord-viewseg" role="group" aria-label="顯示方式"></div>
+        </div>
+        <div class="toolbar">
+          <input class="field field-search" id="ord-search" type="search" placeholder="搜尋訂單編號 / 客戶 / 品項 / 業務" aria-label="搜尋訂單">
+          <select class="field" id="ord-status" aria-label="篩選狀態"><option value="">全部狀態</option></select>
+          <select class="field" id="ord-channel" aria-label="篩選通路"><option value="">全部通路</option></select>
+          <button class="btn btn-sm" id="ord-adv-toggle" type="button" aria-expanded="false" aria-controls="ord-adv">進階篩選</button>
+          <span class="spacer"></span>
+          <span class="result-count" id="ord-count"></span>
+        </div>
+        <div class="adv-filter" id="ord-adv" hidden>
+          <label>訂單日期起<input class="field" id="ord-from" type="date"></label>
+          <label>訂單日期迄<input class="field" id="ord-to" type="date"></label>
+          <label>金額 ≥<input class="field" id="ord-min" type="number" min="0" step="1000" placeholder="0"></label>
+          <label>金額 ≤<input class="field" id="ord-max" type="number" min="0" step="1000" placeholder="不限"></label>
+          <label>負責業務<select class="field" id="ord-owner"><option value="">全部業務</option></select></label>
+        </div>
+        <div class="filter-chips" id="ord-chips" hidden></div>
+        <div class="bulk-bar" id="ord-bulk" hidden>
+          <strong id="ord-bulk-count"></strong>
+          <select class="field" id="ord-bulk-status" aria-label="批次變更狀態"><option value="">批次變更狀態…</option></select>
+          <button class="btn btn-sm" id="ord-bulk-apply" type="button">套用</button>
+          <button class="btn btn-sm" id="ord-bulk-print" type="button">列印出貨單</button>
+          <button class="btn btn-sm" id="ord-bulk-export" type="button">匯出選取</button>
+          <span class="spacer"></span>
+          <button class="link-btn" id="ord-bulk-clear" type="button">取消選取</button>
+        </div>
       </div>
+
+      <div class="ord-pane" data-view="table">
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead id="ord-thead">
+              <tr>
+                <th class="col-check"><input type="checkbox" id="ord-check-all" aria-label="選取本頁全部"></th>
+                <th class="sortable" data-key="id">訂單編號</th>
+                <th class="sortable" data-key="date" data-dir="desc">日期</th>
+                <th class="sortable" data-key="customer">客戶</th>
+                <th class="sortable" data-key="channel">通路</th>
+                <th>品項</th>
+                <th class="sortable num" data-key="amount">金額</th>
+                <th class="sortable" data-key="status">狀態</th>
+                <th class="sortable" data-key="owner">業務</th>
+              </tr>
+            </thead>
+            <tbody id="ord-tbody"></tbody>
+          </table>
+        </div>
+        <div class="list-foot" id="ord-pager"></div>
+      </div>
+      <div class="ord-pane board" data-view="board" id="ord-board" hidden></div>
+      <div class="ord-pane cal" data-view="calendar" id="ord-cal" hidden></div>
     </div>
   </section>
 
@@ -358,21 +419,24 @@
         <h2>茶品庫存</h2>
         <p id="inv-scope-note">—</p>
       </div>
-      <button class="btn" id="inv-export" type="button">匯出 CSV</button>
+      <div class="head-actions">
+        <button class="btn" id="inv-export" type="button">匯出</button>
+        <button class="btn btn-primary" id="inv-restock" type="button">＋ 申請補貨</button>
+      </div>
     </div>
 
-    <div class="toolbar">
-      <input class="field" id="inv-search" type="search" placeholder="搜尋品名 / 產地 / 批號" aria-label="搜尋茶品">
-      <label style="display:flex;align-items:center;gap:6px;font-size:13.5px">
-        <input type="checkbox" id="inv-low"> 只看低於安全庫存
-      </label>
-      <span class="spacer"></span>
-      <span class="result-count" id="inv-count"></span>
-    </div>
-
-    <div class="card" style="padding:4px 0">
-      <div class="table-scroll">
-        <table>
+    <div class="card list-card">
+      <div class="list-head">
+        <div class="toolbar">
+          <input class="field field-search" id="inv-search" type="search" placeholder="搜尋品名 / 產地 / 批號" aria-label="搜尋茶品">
+          <label class="check"><input type="checkbox" id="inv-low"> 只看低於安全庫存</label>
+          <span class="spacer"></span>
+          <span class="result-count" id="inv-count"></span>
+          <div class="seg" id="inv-viewseg" role="group" aria-label="顯示方式"></div>
+        </div>
+      </div>
+      <div class="table-scroll" id="inv-table-pane">
+        <table class="data-table">
           <thead>
             <tr>
               <th>品名</th>
@@ -388,6 +452,66 @@
           <tbody id="inv-tbody"></tbody>
         </table>
       </div>
+      <div class="tea-gallery" id="inv-gallery" hidden></div>
+    </div>
+  </section>
+
+  <!-- ============ 簽核中心 ============ -->
+  <section class="panel" id="panel-approvals" role="tabpanel" aria-labelledby="tab-approvals" hidden>
+    <div class="section-head">
+      <div>
+        <h2>簽核中心</h2>
+        <p>補貨採購、特殊折扣、費用報支線上簽核。關卡依部門與金額自動決定，核准後自動回寫庫存或訂單。</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn btn-primary" id="ap-new" type="button">＋ 新增申請</button>
+      </div>
+    </div>
+    <div class="seg seg-lg" id="ap-tabs" role="group" aria-label="簽核清單"></div>
+    <div class="toolbar" style="margin-top:14px">
+      <input class="field field-search" id="ap-search" type="search" placeholder="搜尋單號 / 內容 / 申請人" aria-label="搜尋簽核單">
+      <select class="field" id="ap-type" aria-label="篩選類型"><option value="">全部類型</option></select>
+      <select class="field" id="ap-status" aria-label="篩選狀態"><option value="">全部狀態</option></select>
+      <span class="spacer"></span>
+      <span class="result-count" id="ap-count"></span>
+    </div>
+    <div class="detail-grid">
+      <div class="card list-card">
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>單號</th><th>內容</th><th>申請人</th><th class="num">金額</th><th>狀態</th></tr></thead>
+            <tbody id="ap-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" id="ap-detail"></div>
+    </div>
+  </section>
+
+  <!-- ============ 報表中心 ============ -->
+  <section class="panel stack" id="panel-reports" role="tabpanel" aria-labelledby="tab-reports" hidden>
+    <div class="section-head" style="margin-bottom:0">
+      <div>
+        <h2>報表中心</h2>
+        <p>從訂單資料即時計算，自動套用你的資料權限。<span id="rp-scope"></span></p>
+      </div>
+      <div class="head-actions">
+        <button class="btn" id="rp-export" type="button">匯出這張報表</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="rp-head">
+        <div class="seg seg-lg" id="rp-tabs" role="group" aria-label="報表類型"></div>
+        <span class="spacer"></span>
+        <label class="rp-ctl">期間<select class="field" id="rp-period"><option value="">5–10 月全部</option></select></label>
+        <label class="check"><input type="checkbox" id="rp-nocancel" checked> 排除已取消</label>
+      </div>
+      <div class="rp-ctls" id="rp-pivot-ctl">
+        <label class="rp-ctl">列<select class="field" id="rp-rows"></select></label>
+        <label class="rp-ctl">欄<select class="field" id="rp-cols"></select></label>
+        <label class="rp-ctl">值<select class="field" id="rp-measure"></select></label>
+      </div>
+      <div id="rp-body" class="rp-body"></div>
     </div>
   </section>
 
@@ -407,6 +531,15 @@
           <tbody id="acct-tbody"></tbody>
         </table>
       </div>
+    </div>
+    <div class="card">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title">角色權限矩陣</div>
+          <div class="chart-note">依公司層級控管每個模組的讀寫範圍；藍框為你目前的角色</div>
+        </div>
+      </div>
+      <div class="table-scroll"><table class="perm-table" id="perm-matrix"></table></div>
     </div>
     <p class="inline-note" style="margin-top:0">
       密碼政策：至少 10 個字元，需含大小寫英文、數字與符號，不可包含帳號名稱，不可沿用目前密碼。
@@ -486,6 +619,96 @@
     <h2 id="info-title"></h2>
     <div class="modal-desc" id="info-body"></div>
     <div class="modal-actions"><button class="btn btn-primary" id="info-ok" type="button">我知道了</button></div>
+  </div>
+</div>
+
+<!-- 單筆表單頁 -->
+<div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+  <header class="drawer-head">
+    <div class="drawer-head-main">
+      <div class="drawer-kicker" id="drawer-kicker"></div>
+      <div class="drawer-title-row"><h2 id="drawer-title"></h2><span id="drawer-chip"></span></div>
+    </div>
+    <div class="drawer-tools">
+      <button class="icon-btn" id="drawer-prev" type="button" aria-label="上一筆（Alt + ↑）" title="上一筆（Alt + ↑）"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+      <span class="cell-sub num" id="drawer-pos"></span>
+      <button class="icon-btn" id="drawer-next" type="button" aria-label="下一筆（Alt + ↓）" title="下一筆（Alt + ↓）"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button class="icon-btn" id="drawer-close" type="button" aria-label="關閉（Esc）" title="關閉（Esc）"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </header>
+  <div class="seg drawer-tabs" id="drawer-tabs" role="group" aria-label="表單分頁"></div>
+  <div class="drawer-body" id="drawer-body"></div>
+  <footer class="drawer-foot" id="drawer-foot"></footer>
+</aside>
+
+<!-- 全文檢索 -->
+<div class="modal-backdrop search-backdrop" id="search-modal" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="全文檢索">
+    <div class="search-input-row">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="search-input" type="search" placeholder="輸入訂單編號、客戶、茶品、批號、同仁…" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="search-results">
+      <kbd>Esc</kbd>
+    </div>
+    <div class="search-results" id="search-results" role="listbox"></div>
+    <div class="search-foot"><span><kbd>↑</kbd><kbd>↓</kbd> 選擇</span><span><kbd>Enter</kbd> 開啟</span><span>結果依你的權限過濾</span></div>
+  </div>
+</div>
+
+<!-- 匯入 -->
+<div class="modal-backdrop" id="import-modal" hidden>
+  <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="imp-title">
+    <h2 id="imp-title">匯入訂單</h2>
+    <p class="modal-desc">從 Excel 另存成 CSV 後選檔，或直接從 Excel 複製貼上（支援 Tab 分隔）。系統會逐列檢查日期、通路、金額、茶品編號與權限，只匯入通過的列。</p>
+    <div class="imp-tools">
+      <label class="btn btn-sm file-btn">選擇 CSV 檔<input type="file" id="imp-file" accept=".csv,.txt,text/csv" hidden></label>
+      <button class="btn btn-sm" id="imp-template" type="button">下載範本</button>
+      <button class="btn btn-sm" id="imp-sample" type="button">載入示範資料（含錯誤列）</button>
+    </div>
+    <textarea class="field imp-text" id="imp-text" rows="6" spellcheck="false" placeholder="日期,客戶,通路,茶品SKU,品項,金額,狀態,負責業務" aria-label="貼上 CSV 內容"></textarea>
+    <div id="imp-preview"></div>
+    <div class="modal-actions">
+      <button class="btn" id="imp-cancel" type="button">取消</button>
+      <button class="btn" id="imp-check" type="button">檢查資料</button>
+      <button class="btn btn-primary" id="imp-go" type="button" disabled>匯入</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新增簽核申請 -->
+<div class="modal-backdrop" id="ap-modal" hidden>
+  <form class="modal modal-wide ap-modal" id="ap-form" role="dialog" aria-modal="true" aria-labelledby="ap-form-title" novalidate>
+    <h2 id="ap-form-title">新增簽核申請</h2>
+    <div class="ap-form-grid">
+      <div>
+        <label class="auth-field"><span>申請類型</span><select class="field" id="apf-type"></select><span class="cell-sub" id="apf-type-note"></span></label>
+        <div id="ap-fields"></div>
+        <label class="auth-field"><span>申請理由</span><textarea class="field" id="apf-reason" rows="3" placeholder="說明需求與預期效益，簽核人會依此判斷"></textarea></label>
+        <div class="auth-error" id="apf-error" role="alert" hidden></div>
+      </div>
+      <aside class="ap-preview">
+        <div class="section-label" style="margin-top:0">簽核流程預覽</div>
+        <div id="ap-preview"></div>
+      </aside>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="ap-cancel" type="button">取消</button>
+      <button class="btn btn-primary" id="ap-submit" type="submit">送出申請</button>
+    </div>
+  </form>
+</div>
+
+<!-- 產生文件 -->
+<div class="modal-backdrop print-backdrop" id="print-modal" hidden>
+  <div class="print-shell" role="dialog" aria-modal="true" aria-labelledby="print-title">
+    <div class="print-toolbar">
+      <strong id="print-title">出貨單預覽</strong>
+      <span class="cell-sub" id="print-count"></span>
+      <span class="spacer"></span>
+      <button class="btn" id="print-close" type="button">關閉</button>
+      <button class="btn btn-primary" id="print-go" type="button">列印／另存 PDF</button>
+    </div>
+    <div class="print-docs" id="print-docs"></div>
   </div>
 </div>
 

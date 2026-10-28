@@ -320,24 +320,24 @@ const CHANNELS = [
 
 /* ---- 訂單 ------------------------------------------------ */
 const ORDERS = [
-  { id: 'SO-26100142', date: '2026-10-26', customer: '春日茶飲連鎖', channel: '批發', item: '紅玉商用茶 (30kg)', amount: 186000, status: '備貨中', owner: '陳佳蓉' },
-  { id: 'SO-26100141', date: '2026-10-25', customer: '個人客戶 · 林',   channel: '電商', item: '台灣紅茶禮盒 ×4', amount: 8800,   status: '已出貨', owner: '吳建宏' },
-  { id: 'SO-26100140', date: '2026-10-25', customer: '禾田食品行',     channel: '批發', item: '凍頂烏龍茶 (50kg)', amount: 142500, status: '已出貨', owner: '林志偉' },
-  { id: 'SO-26100139', date: '2026-10-24', customer: '永衡精密 · 年節禮贈', channel: '企業客製', item: '客製錦雲禮盒 ×160', amount: 416000, status: '待付款', owner: '張雅婷' },
-  { id: 'SO-26100138', date: '2026-10-23', customer: '建國門市 · 現場',  channel: '門市', item: '頂級東方美人 (2kg)', amount: 19600, status: '已出貨', owner: '黃淑芬' },
-  { id: 'SO-26100137', date: '2026-10-22', customer: '青禾茶館',       channel: '批發', item: '杉林溪番仔田茶 (25kg)', amount: 162500, status: '已出貨', owner: '陳佳蓉' },
-  { id: 'SO-26100136', date: '2026-10-21', customer: '個人客戶 · 王',   channel: '電商', item: '蜜香紅烏龍 ×6', amount: 2880,   status: '已出貨', owner: '吳建宏' },
-  { id: 'SO-26100135', date: '2026-10-20', customer: '沐光旅店',       channel: '批發', item: '冬片包種茶 (40kg)', amount: 108000, status: '已出貨', owner: '林志偉' },
-  { id: 'SO-26100134', date: '2026-10-19', customer: '建國門市 · 現場',  channel: '門市', item: '汝窯梨山茶禮盒 ×12', amount: 27000, status: '已出貨', owner: '黃淑芬' },
-  { id: 'SO-26100133', date: '2026-10-18', customer: '個人客戶 · 張',   channel: '電商', item: '阿里山烏龍茶 ×3', amount: 1080, status: '已取消', owner: '吳建宏' },
-  { id: 'SO-26100132', date: '2026-10-17', customer: '翠峰茶行',       channel: '批發', item: '石棹春茶 (60kg)', amount: 138000, status: '已出貨', owner: '陳佳蓉' },
-  { id: 'SO-26100131', date: '2026-10-16', customer: '安穩生技 · 員工禮贈', channel: '企業客製', item: '原葉三角立體茶包 ×340', amount: 95200, status: '已出貨', owner: '張雅婷' },
-  { id: 'SO-26100130', date: '2026-10-15', customer: '個人客戶 · 李',   channel: '電商', item: '南投武界烏龍冬片 ×5', amount: 3400,  status: '已出貨', owner: '吳建宏' },
-  { id: 'SO-26100129', date: '2026-10-14', customer: '禾田食品行',     channel: '批發', item: '凍頂烏龍茶 (30kg)', amount: 85500, status: '已出貨', owner: '林志偉' },
-  { id: 'SO-26100128', date: '2026-10-13', customer: '建國門市 · 現場',  channel: '門市', item: '金福大禹嶺烏龍茶 ×4', amount: 10000, status: '已出貨', owner: '黃淑芬' },
-  { id: 'SO-26100127', date: '2026-10-12', customer: '橙心手搖飲',     channel: '批發', item: '紅玉商用茶 (35kg)', amount: 129500, status: '備貨中', owner: '陳佳蓉' },
-  { id: 'SO-26100126', date: '2026-10-09', customer: '個人客戶 · 周',   channel: '電商', item: '雲南宮廷普洱一泡餅 ×4', amount: 5520, status: '已出貨', owner: '吳建宏' },
-  { id: 'SO-26100125', date: '2026-10-08', customer: '沐光旅店',       channel: '批發', item: '冬片包種茶 (25kg)', amount: 67500, status: '待付款', owner: '林志偉' },
+  { id: 'SO-26100142', date: '2026-10-26', customer: '春日茶飲連鎖', channel: '批發', item: '紅玉商用茶 (30kg)', amount: 186000, status: '備貨中', owner: '陳佳蓉' , sku: 'TEA-007' },
+  { id: 'SO-26100141', date: '2026-10-25', customer: '個人客戶 · 林',   channel: '電商', item: '台灣紅茶禮盒 ×4', amount: 8800,   status: '已出貨', owner: '吳建宏' , sku: null },
+  { id: 'SO-26100140', date: '2026-10-25', customer: '禾田食品行',     channel: '批發', item: '凍頂烏龍茶 (50kg)', amount: 142500, status: '已出貨', owner: '林志偉' , sku: 'TEA-004' },
+  { id: 'SO-26100139', date: '2026-10-24', customer: '永衡精密 · 年節禮贈', channel: '企業客製', item: '客製錦雲禮盒 ×160', amount: 416000, status: '待付款', owner: '張雅婷' , sku: null },
+  { id: 'SO-26100138', date: '2026-10-23', customer: '建國門市 · 現場',  channel: '門市', item: '頂級東方美人 (2kg)', amount: 19600, status: '已出貨', owner: '黃淑芬' , sku: 'TEA-006' },
+  { id: 'SO-26100137', date: '2026-10-22', customer: '青禾茶館',       channel: '批發', item: '杉林溪番仔田茶 (25kg)', amount: 162500, status: '已出貨', owner: '陳佳蓉' , sku: 'TEA-002' },
+  { id: 'SO-26100136', date: '2026-10-21', customer: '個人客戶 · 王',   channel: '電商', item: '蜜香紅烏龍 ×6', amount: 2880,   status: '已出貨', owner: '吳建宏' , sku: 'TEA-008' },
+  { id: 'SO-26100135', date: '2026-10-20', customer: '沐光旅店',       channel: '批發', item: '冬片包種茶 (40kg)', amount: 108000, status: '已出貨', owner: '林志偉' , sku: 'TEA-009' },
+  { id: 'SO-26100134', date: '2026-10-19', customer: '建國門市 · 現場',  channel: '門市', item: '汝窯梨山茶禮盒 ×12', amount: 27000, status: '已出貨', owner: '黃淑芬' , sku: 'TEA-003' },
+  { id: 'SO-26100133', date: '2026-10-18', customer: '個人客戶 · 張',   channel: '電商', item: '阿里山烏龍茶 ×3', amount: 1080, status: '已取消', owner: '吳建宏' , sku: 'TEA-001' },
+  { id: 'SO-26100132', date: '2026-10-17', customer: '翠峰茶行',       channel: '批發', item: '石棹春茶 (60kg)', amount: 138000, status: '已出貨', owner: '陳佳蓉' , sku: 'TEA-005' },
+  { id: 'SO-26100131', date: '2026-10-16', customer: '安穩生技 · 員工禮贈', channel: '企業客製', item: '原葉三角立體茶包 ×340', amount: 95200, status: '已出貨', owner: '張雅婷' , sku: null },
+  { id: 'SO-26100130', date: '2026-10-15', customer: '個人客戶 · 李',   channel: '電商', item: '南投武界烏龍冬片 ×5', amount: 3400,  status: '已出貨', owner: '吳建宏' , sku: 'TEA-010' },
+  { id: 'SO-26100129', date: '2026-10-14', customer: '禾田食品行',     channel: '批發', item: '凍頂烏龍茶 (30kg)', amount: 85500, status: '已出貨', owner: '林志偉' , sku: 'TEA-004' },
+  { id: 'SO-26100128', date: '2026-10-13', customer: '建國門市 · 現場',  channel: '門市', item: '金福大禹嶺烏龍茶 ×4', amount: 10000, status: '已出貨', owner: '黃淑芬' , sku: 'TEA-011' },
+  { id: 'SO-26100127', date: '2026-10-12', customer: '橙心手搖飲',     channel: '批發', item: '紅玉商用茶 (35kg)', amount: 129500, status: '備貨中', owner: '陳佳蓉' , sku: 'TEA-007' },
+  { id: 'SO-26100126', date: '2026-10-09', customer: '個人客戶 · 周',   channel: '電商', item: '雲南宮廷普洱一泡餅 ×4', amount: 5520, status: '已出貨', owner: '吳建宏' , sku: 'TEA-014' },
+  { id: 'SO-26100125', date: '2026-10-08', customer: '沐光旅店',       channel: '批發', item: '冬片包種茶 (25kg)', amount: 67500, status: '待付款', owner: '林志偉' , sku: 'TEA-009' },
 ];
 
 /* ---- 茶品庫存（品項與商品圖對照長信名茶官網茶葉專區；數量、價格為虛構）
@@ -360,8 +360,137 @@ const INVENTORY = [
   { sku: 'TEA-014', img: 'i/107921698.png', name: '雲南宮廷普洱',     origin: '雲南 · 勐海',   grade: '陳年', lot: 'L1603-01', stock: 24,  safety: 15,  unitPrice: 12000, lastIn: '2024-03-15' },
 ];
 
+/* ---- 歷史訂單（2026 年 5–9 月）-----------------------------
+   給報表中心用。以固定種子的亂數產生，每次開啟結果都一樣；
+   只產生 10 月以前的已結案訂單，不影響本月營運數字。
+----------------------------------------------------------- */
+const ORDER_ARCHIVE = (function () {
+  var seed = 1971;
+  function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  function pick(a) { return a[Math.floor(rnd() * a.length)]; }
+  var price = {};
+  INVENTORY.forEach(function (r) { price[r.sku] = { name: r.name.replace(/（.*）/, ''), unit: r.unitPrice }; });
+  var PLAN = [
+    { channel: '批發', n: 6, owners: ['陳佳蓉', '林志偉'], skus: ['TEA-004', 'TEA-005', 'TEA-009', 'TEA-007', 'TEA-002', 'TEA-001'],
+      customers: ['青禾茶館', '禾田食品行', '沐光旅店', '翠峰茶行', '春日茶飲連鎖', '橙心手搖飲', '山嵐茶坊'], kg: [15, 60] },
+    { channel: '門市', n: 4, owners: ['黃淑芬'], skus: ['TEA-006', 'TEA-003', 'TEA-011', 'TEA-012', 'TEA-001', 'TEA-013'],
+      customers: ['建國門市 · 現場'], kg: [1, 4] },
+    { channel: '電商', n: 4, owners: ['吳建宏'], skus: ['TEA-008', 'TEA-001', 'TEA-010', 'TEA-014', 'TEA-007'],
+      customers: ['個人客戶 · 陳', '個人客戶 · 林', '個人客戶 · 黃', '個人客戶 · 許', '個人客戶 · 鄭'], kg: [1, 2] },
+    { channel: '企業客製', n: 1, owners: ['張雅婷'], skus: [null],
+      customers: ['安穩生技 · 員工禮贈', '永衡精密 · 中秋禮贈', '晴川建設 · 客戶禮盒'], kg: [0, 0] },
+  ];
+  var out = [];
+  [9, 8, 7, 6, 5].forEach(function (m) {
+    var mm = m < 10 ? '0' + m : String(m);
+    var rows = [];
+    PLAN.forEach(function (p) {
+      var n = p.n + Math.floor(rnd() * 3);
+      for (var i = 0; i < n; i++) {
+        var sku = pick(p.skus);
+        var item, amount;
+        if (sku) {
+          var kg = p.kg[0] + Math.floor(rnd() * (p.kg[1] - p.kg[0] + 1));
+          item = price[sku].name + ' (' + kg + 'kg)';
+          amount = kg * price[sku].unit;
+        } else {
+          var boxes = 40 + Math.floor(rnd() * 160);
+          item = pick(['客製錦雲禮盒', '原葉三角立體茶包', '台灣紅茶禮盒']) + ' ×' + boxes;
+          amount = boxes * 2600;
+        }
+        rows.push({
+          date: '2026-' + mm + '-' + String(1 + Math.floor(rnd() * 28)).padStart(2, '0'),
+          customer: pick(p.customers), channel: p.channel, item: item, amount: amount,
+          status: rnd() < 0.07 ? '已取消' : '已出貨', owner: pick(p.owners), sku: sku,
+        });
+      }
+    });
+    rows.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    rows.forEach(function (r, i) { r.id = 'SO-26' + mm + String(rows.length - i).padStart(4, '0'); out.push(r); });
+  });
+  return out;
+})();
+
+/* ---- 簽核單 ----------------------------------------------
+   流程規則（app.js 依此建立關卡）：
+   1. 部門主管：申請人所屬部門的主管；申請人本人即主管、或部門沒有主管時略過
+   2. 會計覆核（系統管理員）：金額 ≥ 30,000、折扣申請、或第 1 關被略過時必經
+   steps 的 status：approved / rejected / pending / waiting / skipped
+----------------------------------------------------------- */
+const APPROVAL_TYPES = {
+  restock:  { label: '補貨採購', note: '向茶廠或契作茶農叫貨；核准後自動入庫並更新批號' },
+  discount: { label: '特殊折扣', note: '對既有訂單給折扣；核准後自動改寫訂單金額' },
+  expense:  { label: '費用報支', note: '活動、廣告、雜支等費用' },
+};
+const APPROVALS = [
+  { id: 'AP-2610-014', type: 'restock', applicant: 'E06', createdAt: '2026-10-26 16:40', status: 'pending',
+    data: { sku: 'TEA-003', qty: 60, lot: 'L2610-01' }, amount: 352800,
+    reason: '梨山烏龍僅剩 31 kg（安全量 60），年節禮盒檔期 11 月中開始接單，需在冬茶採收後立即補足。',
+    steps: [
+      { label: '部門主管', approver: null, status: 'skipped', note: '南投茶廠未設部門主管，依規定直接送會計覆核' },
+      { label: '會計覆核', approver: 'E07', status: 'pending' },
+    ] },
+  { id: 'AP-2610-013', type: 'discount', applicant: 'E05', createdAt: '2026-10-25 11:05', status: 'pending',
+    data: { orderId: 'SO-26100139', pct: 8 }, amount: 33280,
+    reason: '永衡精密年節禮贈 160 盒，客戶承諾明年中秋續訂，比照去年給予 92 折。',
+    steps: [
+      { label: '部門主管', approver: 'E01', status: 'pending' },
+      { label: '會計覆核', approver: 'E07', status: 'waiting' },
+    ] },
+  { id: 'AP-2610-012', type: 'expense', applicant: 'E03', createdAt: '2026-10-22 18:20', status: 'pending',
+    data: { category: '門市活動', desc: '11 月「冬茶品飲週」茶席布置與試飲茶具' }, amount: 12800,
+    reason: '去年同活動帶動門市當月營收成長 18%，今年延續辦理。',
+    steps: [
+      { label: '部門主管', approver: 'E03', status: 'skipped', note: '申請人即部門主管，自動略過' },
+      { label: '會計覆核', approver: 'E07', status: 'pending' },
+    ] },
+  { id: 'AP-2610-011', type: 'restock', applicant: 'E02', createdAt: '2026-10-15 10:12', status: 'approved',
+    data: { sku: 'TEA-002', qty: 40, lot: 'L2604-11' }, amount: 156000,
+    reason: '青禾茶館固定月訂 25 kg，現貨不足兩個月用量。',
+    steps: [
+      { label: '部門主管', approver: 'E01', status: 'approved', at: '2026-10-15 13:30', note: '同意，請優先安排竹山契作茶園。' },
+      { label: '會計覆核', approver: 'E07', status: 'approved', at: '2026-10-16 09:10', note: '預算內，核准。' },
+    ] },
+  { id: 'AP-2610-010', type: 'expense', applicant: 'E04', createdAt: '2026-10-09 15:48', status: 'rejected',
+    data: { category: '廣告投放', desc: '雙 11 電商關鍵字與社群廣告' }, amount: 45000,
+    reason: '雙 11 檔期預估帶來 30 萬營收，需提前兩週投放。',
+    steps: [
+      { label: '部門主管', approver: null, status: 'skipped', note: '電商部門未設主管，依規定直接送會計覆核' },
+      { label: '會計覆核', approver: 'E07', status: 'rejected', at: '2026-10-10 10:02', note: '請附上 9 月廣告成效（ROAS）後重新申請。' },
+    ] },
+  { id: 'AP-2610-009', type: 'restock', applicant: 'E04', createdAt: '2026-10-08 09:30', status: 'pending',
+    data: { sku: 'TEA-008', qty: 30, lot: 'L2610-02' }, amount: 73800,
+    reason: '蜜香紅烏龍為電商熱銷第 2 名，目前低於安全庫存。',
+    steps: [
+      { label: '部門主管', approver: null, status: 'skipped', note: '電商部門未設主管，依規定直接送會計覆核' },
+      { label: '會計覆核', approver: 'E07', status: 'pending' },
+    ] },
+];
+
+/* ---- 資料版本紀錄（每筆訂單、茶品的欄位異動）---- */
+const RECORD_LOG = [
+  { ts: '2026-10-26 10:05', actor: '王美玲', type: 'item', id: 'TEA-003', action: '修改',
+    changes: [{ field: '安全庫存', from: '45', to: '60' }], note: '年節檔期前調高安全量' },
+  { ts: '2026-10-25 17:30', actor: '張雅婷', type: 'order', id: 'SO-26100139', action: '修改',
+    changes: [{ field: '狀態', from: '備貨中', to: '待付款' }, { field: '金額', from: '400000', to: '416000' }], note: '客戶追加 6 盒' },
+  { ts: '2026-10-24 09:12', actor: '張雅婷', type: 'order', id: 'SO-26100139', action: '新增', changes: [], note: '建立訂單' },
+  { ts: '2026-10-16 09:10', actor: '簽核系統', type: 'item', id: 'TEA-002', action: '入庫',
+    changes: [{ field: '庫存', from: '54', to: '94' }], note: '補貨簽核 AP-2610-011 核准入庫 40 kg' },
+  { ts: '2026-10-12 14:22', actor: '陳佳蓉', type: 'order', id: 'SO-26100127', action: '修改',
+    changes: [{ field: '狀態', from: '待付款', to: '備貨中' }], note: '已收訂金' },
+];
+const COMMENTS = {
+  'order:SO-26100139': [
+    { ts: '2026-10-25 17:35', actor: '張雅婷', text: '客戶要求 11/20 前送達台南廠，已跟物流確認可行。' },
+    { ts: '2026-10-26 09:02', actor: '陳佳蓉', text: '折扣簽核我今天看，先別承諾 9 折以下。' },
+  ],
+  'item:TEA-003': [
+    { ts: '2026-10-26 10:06', actor: '王美玲', text: '冬茶採收後價格可能上漲 8%，補貨單請盡早送。' },
+  ],
+};
+
 /* 以傳統 script 載入，掛到全域命名空間，讓 file:// 直接開也能跑 */
 window.DEMO = {
   IMG_BASE, AUTH_ITERATIONS, ACCOUNTS, META, TEMPLATES, ACCESS_LEVELS, WORKFLOW, CYCLE, CYCLE_STATE, AUDIT_SEED, EMPLOYEES, MONTHLY_REVENUE, LAST_YEAR_SAME_MONTH,
-  PREV_PERIOD_AVG, CHANNELS, ORDERS, INVENTORY,
+  PREV_PERIOD_AVG, CHANNELS, ORDERS, INVENTORY, ORDER_ARCHIVE, APPROVAL_TYPES, APPROVALS, RECORD_LOG, COMMENTS,
 };
